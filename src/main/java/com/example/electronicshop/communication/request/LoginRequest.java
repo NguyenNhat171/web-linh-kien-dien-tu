@@ -6,8 +6,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 @Data
 public class LoginRequest {
-    @NotBlank
-    @Email(message = "Email invalidate")
+    @Email
     private String email;
     private String password;
 }

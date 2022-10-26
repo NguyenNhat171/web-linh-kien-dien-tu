@@ -9,15 +9,14 @@ import javax.validation.constraints.Size;
 @Data
 @AllArgsConstructor
 public class Register {
-    @NotBlank(message = "Name is required")
+
     private String name;
-    @NotBlank(message = "Email is required")
     @Size(max = 50)
-    @Email(message = "Email invalidate")
+    @Email
     private String email;
-    @NotBlank(message = "Password can not be null")
     @Size( min = 5, max = 50)
     private String password;
-    @NotBlank(message = "Phone can not be null")
+    private String phone;
+    private String address;
     private String role;
 }

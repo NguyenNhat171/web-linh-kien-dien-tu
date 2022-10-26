@@ -4,15 +4,18 @@ package com.example.electronicshop.security.userdetail;
 import com.example.electronicshop.config.Constant;
 import com.example.electronicshop.models.enity.User;
 import com.example.electronicshop.repository.UserRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
-
+@Service
+@AllArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
-    private  UserRepository userRepository;
+    private final   UserRepository userRepository;
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {

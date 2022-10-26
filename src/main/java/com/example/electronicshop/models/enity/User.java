@@ -23,28 +23,31 @@ public class User {
     private String id;
     private String name;
     @Size(max = 50)
-    @Email(message = "Email invalidate")
+    @Email
     @Indexed(unique = true)
     private String email;
-    @NotNull(message = "Password can not be null")
     @Size( min = 5, max = 50)
     @JsonIgnore
     private String password;
     private String phone;
     private String address;
+    private String role;
     private String state;
     @JsonIgnore
     private Token token;
+
     private ESocial social;
 
-    public User(String name, String email, String password, String phone, String address, String state, Token token, ESocial social) {
+    public User(String name, String email, String password, String phone, String address, String role, String state, ESocial social) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.phone = phone;
         this.address = address;
+        this.role = role;
         this.state = state;
-        this.token = token;
         this.social = social;
     }
+
+
 }
