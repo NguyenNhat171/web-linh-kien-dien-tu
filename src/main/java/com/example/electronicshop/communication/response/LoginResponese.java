@@ -11,6 +11,8 @@ public class LoginResponese {
     private String id;
     private String email;
     private String name;
+    private String address;
+    private String phonne;
     private String role;
     private String accessToken;
 }

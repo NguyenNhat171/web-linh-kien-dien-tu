@@ -56,6 +56,7 @@ public class WebSecutity {
                 .authorizeRequests().antMatchers(ALLOWED_LIST_URLS).permitAll().and()
                 .authorizeRequests().antMatchers(HttpMethod.GET, ALLOWED_GET_LIST_URLS).permitAll().and()
                 .authorizeRequests().antMatchers("/api/admin/**")
+//                .hasAnyAuthority( Constant.ROLE_ADMIN).and()
                 .hasAnyAuthority( Constant.ROLE_ADMIN).and()
                 .authorizeRequests().antMatchers("/api/**")
                 .hasAnyAuthority(Constant.ROLE_USER, Constant.ROLE_ADMIN)
