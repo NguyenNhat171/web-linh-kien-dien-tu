@@ -47,6 +47,8 @@ public class WebSecutity {
 
     };
 
+//    @Value("http://localhost:3000")
+//    private String [] allowOrigin;
     @Bean
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
 
@@ -72,7 +74,7 @@ public class WebSecutity {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("authorization", "content-type", "x-auth-token", "origin", "x-request-with", "accept"));
         configuration.setExposedHeaders(List.of("x-auth-token"));
