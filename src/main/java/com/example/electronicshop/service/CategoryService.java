@@ -6,7 +6,9 @@ import com.example.electronicshop.config.Constant;
 import com.example.electronicshop.models.ResponseObject;
 import com.example.electronicshop.models.enity.Brand;
 import com.example.electronicshop.models.enity.Category;
+import com.example.electronicshop.models.enity.User;
 import com.example.electronicshop.notification.AppException;
+import com.example.electronicshop.notification.NotFoundException;
 import com.example.electronicshop.repository.CategoryRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -66,15 +68,38 @@ public class CategoryService {
             );
         }
     }
-//    public ResponseEntity<ResponseObject>updateCategory (String id, CategoryRequest categoryRequest)
-//    {
-//        Optional<Category> category = categoryRepository.findCategoryByIdAndState(id, categoryRequest.getState());
-//        if(category.isPresent()){
-//            Optional<Category> updateCategory = categoryRepository.findById(id);
-//            updateCategory.get().setName(categoryRequest.getName());
-//            updateCategory.get().setState(categoryRequest.getState());
-//            Optional<Category>checkCategoryName = categoryRepository.existsCategoriesByNameAndState(updateCategory.get().getName(),updateCategory.get().getState())
-//
-//        }
-//    }
-}
+    public ResponseEntity<ResponseObject>updateCategory (String id, CategoryRequest categoryRequest) {
+        Optional<Category> category = categoryRepository.findCategoryByIdAndState(id, categoryRequest.getState());
+        if (category.isPresent()) {
+            Optional<Category> updateCategory = categoryRepository.findById(id);
+            updateCategory.get().setName(categoryRequest.getName());
+            updateCategory.get().setState(categoryRequest.getState());
+            Optional<Category> checkCategoryName = categoryRepository.existsCategoriesByNameAndState(updateCategory.get().getName(), updateCategory.get().getState());
+            if (checkCategoryName.isPresent()) {
+                return ResponseEntity.status(HttpStatus.OK).body(
+                        new ResponseObject("false", "Cannot update category because exits name ", ""));
+            } else
+                categoryRepository.save(updateCategory.get());
+            CategoryResponse categoryResponse = new CategoryResponse(updateCategory.get().getId(), updateCategory.get().getName(), updateCategory.get().getState());
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("false", "Cannot update category because exits name ", ""));
+
+        } else {
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(
+                    new ResponseObject("ok", "update Category Fail", "")
+            );
+        }
+    }
+        public ResponseEntity<ResponseObject> deleteCategory(String id)
+        {
+            Optional<Category> category = categoryRepository.findCategoryByIdAndState(id, Constant.ENABLE);
+            if (category.isPresent()) {
+                category.get().setState(Constant.DISABLE);
+                categoryRepository.save(category.get());
+                return ResponseEntity.status(HttpStatus.OK).body(
+                        new ResponseObject("true", "Delete category success", ""));
+            }
+            throw new NotFoundException("Can not find category");
+        }
+    }
+
