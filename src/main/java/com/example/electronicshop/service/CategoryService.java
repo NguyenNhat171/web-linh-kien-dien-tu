@@ -33,7 +33,16 @@ public class CategoryService {
                     new ResponseObject("false", "Cannot find category ", ""));
 
     }
-
+    public ResponseEntity<ResponseObject> findCategoryById(String id)
+    {
+        Optional<Category> category = categoryRepository.findById(id);
+        if(category.isPresent())
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("true", "Get category success", category));
+        else
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("false", "Cannot find category ", ""));
+    }
     public ResponseEntity<ResponseObject> findAllCategory() {
         List<Category> categoryList = categoryRepository.findCategoryByState(Constant.ENABLE);
         if (categoryList.size() > 0)
