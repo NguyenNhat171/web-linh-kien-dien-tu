@@ -37,7 +37,7 @@ public class CategoryController {
 
 
 
-    @DeleteMapping(path = "/admin/manage/categories/{id}")
+    @DeleteMapping(path = "/admin/manage/categories/deactive/{id}")
     public ResponseEntity<ResponseObject> deleteCategory (@PathVariable("id") String id){
         return categoryService.deleteCategory(id);
     }

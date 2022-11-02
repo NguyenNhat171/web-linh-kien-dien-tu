@@ -11,7 +11,7 @@ public interface CategoryRepository extends MongoRepository<Category, String> {
     Optional<Category>findCategoryByNameAndState(String name, String state);
     List<Category>findCategoryByState(String state);
     Optional<Category>findCategoryByIdAndState(String id, String state);
-    Optional<Category>existsCategoriesByNameAndState(String name, String state);
+    Optional<Category>existsCategoriesByName(String name);
 
 
 

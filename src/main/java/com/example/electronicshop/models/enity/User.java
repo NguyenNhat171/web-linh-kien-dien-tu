@@ -6,13 +6,16 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.ReadOnlyProperty;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 @Document(collection = "users")
 @Data
@@ -35,7 +38,12 @@ public class User {
     private String state;
     @JsonIgnore
     private Token token;
-
+    @JsonIgnore
+    private List<Order> orders;
+    @ReadOnlyProperty
+    @DocumentReference(lookup="{'user':?#{#self._id} }", lazy = true)
+    @JsonIgnore
+    private List<Comment> comments;
     private ESocial social;
 
     public User(String name, String email, String password, String phone, String address, String role, String state, ESocial social) {

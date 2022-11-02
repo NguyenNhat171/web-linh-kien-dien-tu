@@ -60,42 +60,41 @@ public class CategoryService {
                 return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(
                         new ResponseObject("Fail", "Insert Category Fail Because Category Name exist", "")
                 );
+            } else {
+                Category newcategory = new Category(categoryRequest.getName(), categoryRequest.getState());
+                categoryRepository.save(newcategory);
+                CategoryResponse categoryResponse = new CategoryResponse(newcategory.getId(), newcategory.getName(), categoryRequest.getState());
+                if (categoryResponse != null) {
+                    return ResponseEntity.status(HttpStatus.OK).body(
+                            new ResponseObject("true", "Get category success", categoryResponse));
+                }
+
+             else{
+                    return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(
+                            new ResponseObject("ok", "Insert Category Fail", "")
+                    );
+                }
             }
-
-            Category newcategory = new Category(categoryRequest.getName(), categoryRequest.getState());
-            categoryRepository.save(newcategory);
-            CategoryResponse categoryResponse = new CategoryResponse(newcategory.getId(), newcategory.getName(), categoryRequest.getState());
-            if (categoryResponse != null)
-                return ResponseEntity.status(HttpStatus.OK).body(
-                        new ResponseObject("true", "Get category success", categoryResponse));
-
-            return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("false", "Cannot create category ", ""));
-        } else {
-            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(
-                    new ResponseObject("ok", "Insert Category Fail", "")
-            );
         }
+        else
+        return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(
+                new ResponseObject("Fail", "Insert Category Fail Because Category Name exist", ""));
     }
     public ResponseEntity<ResponseObject>updateCategory (String id, CategoryRequest categoryRequest) {
-        Optional<Category> category = categoryRepository.findCategoryByIdAndState(id, categoryRequest.getState());
+        Optional<Category> category = categoryRepository.findById(id);
         if (category.isPresent()) {
             Optional<Category> updateCategory = categoryRepository.findById(id);
             updateCategory.get().setName(categoryRequest.getName());
             updateCategory.get().setState(categoryRequest.getState());
-            Optional<Category> checkCategoryName = categoryRepository.existsCategoriesByNameAndState(updateCategory.get().getName(), updateCategory.get().getState());
-            if (checkCategoryName.isPresent()) {
-                return ResponseEntity.status(HttpStatus.OK).body(
-                        new ResponseObject("false", "Cannot update category because exits name ", ""));
-            } else
-                categoryRepository.save(updateCategory.get());
+            categoryRepository.save(updateCategory.get());
             CategoryResponse categoryResponse = new CategoryResponse(updateCategory.get().getId(), updateCategory.get().getName(), updateCategory.get().getState());
             return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("false", "Cannot update category because exits name ", ""));
+                    new ResponseObject("true", "update category ", categoryResponse));
+        }
 
-        } else {
+        else {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(
-                    new ResponseObject("ok", "update Category Fail", "")
+                    new ResponseObject("false", "update Category Fail", "")
             );
         }
     }
