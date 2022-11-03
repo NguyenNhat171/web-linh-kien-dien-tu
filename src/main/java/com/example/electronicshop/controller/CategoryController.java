@@ -16,11 +16,11 @@ public class CategoryController {
     public ResponseEntity<ResponseObject> findCategoryById (@PathVariable("id") String id){
         return categoryService.findCategoryById(id);
     }
-    @GetMapping(path = "/admin/manage/categories")
+    @GetMapping(path = "/admin/manage/categories") //cho admin
     public ResponseEntity<ResponseObject> findAll (){
         return categoryService.findAll();
     }
-    @GetMapping(path = "/categories")
+    @GetMapping(path = "/categories") // cho user
     public ResponseEntity<ResponseObject> findAllCategory (){
     return categoryService.findAllCategory();
     }

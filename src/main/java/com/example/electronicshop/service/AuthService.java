@@ -21,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -47,7 +48,7 @@ public class AuthService {
     private final EmailService emailService;
 
    public ResponseEntity<ResponseObject> login(LoginRequest req) {
-
+       try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(req.getEmail(), req.getPassword()));
             SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -59,7 +60,11 @@ public class AuthService {
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ResponseObject("true", "Log in successfully ", res)
             );
-
+   } catch (
+    BadCredentialsException ex) {
+//            ex.printStackTrace();
+        throw new BadCredentialsException(ex.getMessage());
+    }
 
     }
 

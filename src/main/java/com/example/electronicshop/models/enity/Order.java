@@ -28,7 +28,7 @@ public class Order {
     private User user;
 
     @DocumentReference(lookup="{'order':?#{#self._id} }", lazy = true)
-    private List<OrderItem> items = new ArrayList<>();
+    private List<OrderProduct> items = new ArrayList<>();
     private String state;
     @CreatedDate
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")

@@ -113,7 +113,7 @@
             <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px;">
                 <tr>
                     <td align="center" valign="top" >
-                        <h1 style="margin-TOP: 30px; font-size: 52px; font-weight: 700; letter-spacing: -1px; line-height: 48px;font-family: Arial, sans-serif;">FASHION STORE</h1>
+                        <h1 style="margin-TOP: 30px; font-size: 52px; font-weight: 700; letter-spacing: -1px; line-height: 48px;font-family: Arial, sans-serif;">ELECTRONIC SHOP</h1>
                     </td>
                 </tr>
             </table>
