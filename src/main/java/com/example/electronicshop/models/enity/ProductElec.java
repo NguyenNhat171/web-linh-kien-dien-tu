@@ -25,7 +25,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductElec {
+public class ProductElec{
     @Id
     private String id;
     private String name;

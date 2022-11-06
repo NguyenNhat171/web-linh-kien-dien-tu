@@ -21,8 +21,8 @@ import java.util.Optional;
 @AllArgsConstructor
 public class ProductElecMap {
     private final CategoryRepository categoryRepository;
-    private final BrandRepository brandRepository;
-    private final ProductElecImage productImage;
+//    private final BrandRepository brandRepository;
+//    private final ProductElecImage productElecImage;
     public ProductElec toProduct(ProductElecRequest req) {
         Optional<Category> category = categoryRepository.findCategoryByIdAndState(req.getCategory(), Constant.ENABLE);
 //        if (category.isEmpty())

@@ -7,7 +7,6 @@ import com.example.electronicshop.config.CloudinaryConfig;
 import com.example.electronicshop.config.Constant;
 import com.example.electronicshop.map.ProductElecMap;
 import com.example.electronicshop.models.ResponseObject;
-import com.example.electronicshop.models.enity.Product;
 import com.example.electronicshop.models.enity.ProductElec;
 import com.example.electronicshop.models.enity.ProductElecImage;
 import com.example.electronicshop.notification.AppException;
@@ -24,11 +23,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import com.mongodb.MongoWriteException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 @Service
@@ -37,7 +33,6 @@ import java.util.stream.Collectors;
 public class ProductElecService {
     private final ProductElecRepository productElecRepository;
     private final CategoryRepository categoryRepository;
-    private final BrandRepository brandRepository;
     private final ProductElecMap productElecMap;
     private final CloudinaryConfig cloudinary;
 
