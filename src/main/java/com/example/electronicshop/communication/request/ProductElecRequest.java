@@ -8,27 +8,26 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductElecRequest {
-    private String id;
     private String name;
     private String description;
     private BigDecimal price;
-    private Category category;
+    private String category;
     private int quantity;
-    private int sold;
-    private double rate ;
-    private String url;
+    private List<MultipartFile> images;
     @CreatedDate
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     LocalDateTime createdDate;
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     @LastModifiedDate
-    LocalDateTime lastModifiedDate;
+    LocalDateTime updateDate;
 }
