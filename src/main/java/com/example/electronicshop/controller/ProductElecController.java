@@ -18,9 +18,19 @@ public class ProductElecController {
     public ResponseEntity<?> addProduct( @ModelAttribute ProductElecRequest req) {
         return productElecService.addProduct(req);
     }
+    @PutMapping("/admin/manage/productelec/update/{productId}")
+    public ResponseEntity<?> updateProduct (@PathVariable("productId") String productId, @RequestBody ProductElecRequest req){
+        return productElecService.updateProduct(productId,req);
+    }
+
+
     @GetMapping(path = "/productelec/all")
     public ResponseEntity<?> findAll (@ParameterObject Pageable pageable){
         return productElecService.findAll(pageable);
+    }
+    @GetMapping(path = "/productelec/{productId}")
+    public ResponseEntity<?> findProductById (@PathVariable("productId") String productId){
+        return productElecService.findProductById(productId);
     }
     @DeleteMapping("/admin/manage/productelec/deactive/{productId}")
     public ResponseEntity<ResponseObject> deactiveProduct(@PathVariable("productId") String productId) {

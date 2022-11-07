@@ -32,4 +32,5 @@ public class ProductElecListResponse {
     LocalDateTime createdDate;
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     LocalDateTime updateDate;
+    private  String state;
 }

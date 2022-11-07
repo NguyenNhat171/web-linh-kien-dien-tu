@@ -21,8 +21,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class ProductElecMap {
     private final CategoryRepository categoryRepository;
-//    private final BrandRepository brandRepository;
-//    private final ProductElecImage productElecImage;
+
     public ProductElec toProduct(ProductElecRequest req) {
         Optional<Category> category = categoryRepository.findCategoryByIdAndState(req.getCategory(), Constant.ENABLE);
 //        if (category.isEmpty())
@@ -39,7 +38,7 @@ public class ProductElecMap {
         images.removeIf(e->!seen.add(e.getImageId()));
 
         return new ProductElecListResponse(req.getId(),req.getName(),req.getDescription(),req.getRate(),req.getCategory(),
-                req.getQuantity(),req.getSold(),req.getPrice(),req.getImages(),req.getCreatedDate(),req.getUpdateDate());
+                req.getQuantity(),req.getSold(),req.getPrice(),req.getImages(),req.getCreatedDate(),req.getUpdateDate(), req.getState());
     }
     public ProductElecResponse toProductRes(ProductElec req) {
 //        String discountString = req.getPrice().multiply(BigDecimal.valueOf((double) (100- req.getDiscount())/100))

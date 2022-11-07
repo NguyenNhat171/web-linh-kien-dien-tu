@@ -7,6 +7,7 @@ import com.example.electronicshop.config.CloudinaryConfig;
 import com.example.electronicshop.config.Constant;
 import com.example.electronicshop.map.ProductElecMap;
 import com.example.electronicshop.models.ResponseObject;
+import com.example.electronicshop.models.enity.Category;
 import com.example.electronicshop.models.enity.ProductElec;
 import com.example.electronicshop.models.enity.ProductElecImage;
 import com.example.electronicshop.notification.AppException;
@@ -56,6 +57,46 @@ public class ProductElecService {
         );
     }
 
+    @Transactional
+    public ResponseEntity<?> updateProduct(String id, ProductElecRequest req) {
+        Optional<ProductElec> product = productElecRepository.findById(id);
+        if (product.isPresent() && req != null) {
+            processUpdate(req, product.get());
+            try {
+                productElecRepository.save(product.get());
+            } catch (MongoWriteException e) {
+                throw new AppException(HttpStatus.CONFLICT.value(), "Product name already exists");
+            } catch (Exception e) {
+                throw new AppException(HttpStatus.EXPECTATION_FAILED.value(), e.getMessage());
+            }
+            ProductElecResponse res = productElecMap.toProductRes(product.get());
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("true", "Update product successfully ", res)
+            );
+        }
+        throw new NotFoundException("Can not found product with id: "+id);
+    }
+
+    public void processUpdate(ProductElecRequest req, ProductElec product) {
+        if (!req.getName().equals(product.getName()))
+            product.setName(req.getName());
+        if (!req.getDescription().equals(product.getDescription()))
+            product.setDescription(req.getDescription());
+        if (!req.getPrice().equals(product.getPrice()))
+            product.setPrice(req.getPrice());
+        if (!req.getCategory().equals(product.getCategory().getId())) {
+            Optional<Category> category = categoryRepository.findCategoryByIdAndState(req.getCategory(), Constant.ENABLE);
+            if (category.isPresent())
+                product.setCategory(category.get());
+            else throw new NotFoundException("Can not found category with id: "+req.getCategory());
+        }
+
+        if (req.getState() != null && !req.getState().isEmpty() &&
+                (req.getState().equalsIgnoreCase(Constant.ENABLE) ||
+                        req.getState().equalsIgnoreCase(Constant.DISABLE)))
+            product.setState(req.getState());
+        else throw new AppException(HttpStatus.BAD_REQUEST.value(), "Invalid state");
+    }
     public List<ProductElecImage> processUploadImage (List<MultipartFile> images, ProductElec product) {
         if (images == null || images.isEmpty()) throw new AppException(HttpStatus.BAD_REQUEST.value(), "images is empty");
         for (int i = 0; i < images.size(); i++) {
@@ -90,7 +131,7 @@ public class ProductElecService {
                     new ResponseObject("true", "Get all product success", resp));
         return null;
     }
-    public ResponseEntity<?> findById(String id) {
+    public ResponseEntity<?> findProductById(String id) {
         Optional<ProductElec> product = productElecRepository.findProductByIdAndState(id, Constant.ENABLE);
         if (product.isPresent()) {
             ProductElecResponse res = productElecMap.toProductRes(product.get());
@@ -98,6 +139,14 @@ public class ProductElecService {
                     new ResponseObject("true", "Get product success", res));
         }
         throw new NotFoundException("Can not found any product with id: "+id);
+    }
+ public ResponseEntity<?>findProductDisableByAdmin(Pageable pageable){
+        Page<ProductElec> products;
+        products = productElecRepository.findAllByState(Constant.DISABLE, pageable);
+        List<ProductElecListResponse> resList = products.getContent().stream().map(productElecMap::toProductListRes).collect(Collectors.toList());
+     ResponseEntity<?> resp = addPageableToRes(products, resList);
+     if (resp != null) return resp;
+     throw new NotFoundException("Can not found any product");
     }
     public ResponseEntity<ResponseObject> deactivatedProduct(String id) {
         Optional<ProductElec> product = productElecRepository.findProductByIdAndState(id, Constant.ENABLE);
@@ -111,10 +160,10 @@ public class ProductElecService {
     }
     @Transactional
     public ResponseEntity<ResponseObject> destroyProduct(String id) {
-        Optional<ProductElec> product = productElecRepository.findProductByIdAndState(id, Constant.ENABLE);
-        if (product.isPresent()) {
+        Optional<ProductElec> productElec = productElecRepository.findById(id);
+        if (productElec.isPresent()) {
             try {
-                productElecRepository.deleteById(product.get().getId());
+                productElecRepository.deleteById(productElec.get().getId());
 
             } catch (Exception e) {
                 log.error(e.getMessage());

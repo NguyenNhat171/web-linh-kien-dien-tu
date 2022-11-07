@@ -29,6 +29,8 @@ public class Order {
 
     @DocumentReference(lookup="{'order':?#{#self._id} }", lazy = true)
     private List<OrderProduct> items = new ArrayList<>();
+    private String address;
+    private String amount;
     private String state;
     @CreatedDate
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
@@ -42,6 +44,14 @@ public class Order {
     private BigDecimal totalPrice;
 
 
+    public long getTotalProduct() {
+        return items.size();
+    }
+    public  BigDecimal getTotalPrice() {
+        totalPrice = items.stream().map(OrderProduct::getPrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        return totalPrice;
+    }
 
     public Order(User user, String state) {
         this.user = user;

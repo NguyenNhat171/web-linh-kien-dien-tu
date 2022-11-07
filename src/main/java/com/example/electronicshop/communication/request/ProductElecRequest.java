@@ -30,4 +30,5 @@ public class ProductElecRequest {
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     @LastModifiedDate
     LocalDateTime updateDate;
+    private String state;
 }
