@@ -17,6 +17,7 @@ import com.example.electronicshop.repository.CategoryRepository;
 import com.example.electronicshop.repository.ProductElecRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -37,6 +38,25 @@ public class ProductElecService {
     private final ProductElecMap productElecMap;
     private final CloudinaryConfig cloudinary;
 
+    public ResponseEntity<?> findProductByCategoryId(String id, Pageable pageable) {
+        Page<ProductElec> products;
+        try {
+            Optional<Category> category = categoryRepository.findCategoryByIdAndState(id, Constant.ENABLE);
+            if (category.isPresent()) {
+                products = productElecRepository.findProductsByCategory(new ObjectId(id), pageable);
+            }
+            else{
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    new ResponseObject("false", "Request is null", ""));
+            }
+        } catch (Exception e) {
+            throw new AppException(HttpStatus.BAD_REQUEST.value(), "Error when finding");
+        }
+        List<ProductElecListResponse> resList = products.stream().map(productElecMap::toProductListRes).collect(Collectors.toList());
+        ResponseEntity<?> resp = addPageableToRes(products, resList);
+        if (resp != null) return resp;
+        throw new NotFoundException("Can not found any product with category or brand id: "+id);
+    }
     public ResponseEntity<?> addProduct(ProductElecRequest req) {
         List<ProductElecImage> images = new ArrayList<>();
         if (req != null) {

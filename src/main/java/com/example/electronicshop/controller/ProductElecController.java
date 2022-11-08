@@ -23,7 +23,11 @@ public class ProductElecController {
         return productElecService.updateProduct(productId,req);
     }
 
-
+    @GetMapping(path = "/products/category/{id}")
+    public ResponseEntity<?> findByCategoryIdAndBrandId (@PathVariable("id") String id,
+                                                         @ParameterObject Pageable pageable){
+        return productElecService.findProductByCategoryId(id, pageable);
+    }
     @GetMapping(path = "/productelec/all")
     public ResponseEntity<?> findAll (@ParameterObject Pageable pageable){
         return productElecService.findAll(pageable);

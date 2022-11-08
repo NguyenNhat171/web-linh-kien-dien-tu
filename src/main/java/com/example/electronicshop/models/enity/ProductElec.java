@@ -6,10 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.annotation.ReadOnlyProperty;
+import org.springframework.data.annotation.*;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
@@ -40,6 +37,9 @@ public class ProductElec{
     //    @DocumentReference(lookup="{'product':?#{#self._id} }", lazy = true)
 //    private List<ProductImage> images = new ArrayList<>();
 //    private String url;
+    @ReadOnlyProperty
+    @DocumentReference(lookup="{'product':?#{#self._id} }", lazy = true)
+    private List<Comment> comments;
     @CreatedDate
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private LocalDateTime createdDate;
@@ -80,5 +80,13 @@ public ProductElec(String name, String description, BigDecimal price, Category c
         this.state = state;
         this.createdDate = createdDate;
         this.updateDate = updateDate;
+    }
+    @Transient
+    public int getRateCount() {
+        try {
+            return comments.size();
+        } catch (Exception e) {
+            return 0;
+        }
     }
 }
