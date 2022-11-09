@@ -67,7 +67,7 @@ public class CommentService {
 
                 Comment newComment = new Comment(req.getContent(), req.getRate(), product.get(), user.get(), Constant.COMMENT_ENABLE, LocalDateTime.now());
                 commentRepository.save(newComment);
-                double rate = ((product.get().getRate() * product.get().getRateCount()) + req.getRate())/ (product.get().getRateCount()+1);
+                int rate = ((product.get().getRate() * product.get().getRateCount()) + req.getRate())/ (product.get().getRateCount());
                 product.get().setRate(rate);
                 productRepository.save(product.get());
                 return ResponseEntity.status(HttpStatus.OK).body(

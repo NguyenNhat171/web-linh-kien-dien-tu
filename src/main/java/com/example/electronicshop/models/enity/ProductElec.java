@@ -32,7 +32,7 @@ public class ProductElec{
     private Category category;
     private int quantity;
     private int sold;
-    private double rate = 0;
+    private int rate = 0;
     private String state;
     //    @DocumentReference(lookup="{'product':?#{#self._id} }", lazy = true)
 //    private List<ProductImage> images = new ArrayList<>();

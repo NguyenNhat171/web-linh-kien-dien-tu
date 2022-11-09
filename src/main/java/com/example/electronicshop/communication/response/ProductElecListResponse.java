@@ -21,7 +21,7 @@ public class ProductElecListResponse {
     private String id;
     private String name;
     private String description;
-    private double rate;
+    private int rate;
     @DocumentReference
     private Category category;
     private int quantity;

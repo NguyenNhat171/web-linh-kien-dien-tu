@@ -12,6 +12,6 @@ public class CommentRequest {
     private String content;
     private String productId;
     @Range(min = 1, max = 5)
-    private double rate;
+    private int rate;
 
 }

@@ -104,6 +104,7 @@ public class ProductElecService {
             product.setDescription(req.getDescription());
         if (!req.getPrice().equals(product.getPrice()))
             product.setPrice(req.getPrice());
+            product.setQuantity(req.getQuantity());
         if (!req.getCategory().equals(product.getCategory().getId())) {
             Optional<Category> category = categoryRepository.findCategoryByIdAndState(req.getCategory(), Constant.ENABLE);
             if (category.isPresent())
