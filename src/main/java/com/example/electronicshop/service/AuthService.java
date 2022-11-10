@@ -29,6 +29,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.constraints.Null;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -56,14 +57,19 @@ public class AuthService {
             String accesstoken = jwtUtils.generateTokenFromUserId(user.getUser());
             LoginResponese res = userMapper.toLoginRes(user.getUser());
             res.setAccessToken(accesstoken);
-
+            if(res != null)
             return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("true", "Log in successfully ", res)
-            );
+                    new ResponseObject("true", "Log in successfully ", res));
+            else
+                return ResponseEntity.status(HttpStatus.OK).body(
+                        new ResponseObject("flase", "Can't Log in ",""));
+
    } catch (
     BadCredentialsException ex) {
-//            ex.printStackTrace();
+          ex.printStackTrace();
         throw new BadCredentialsException(ex.getMessage());
+
+
     }
 
     }

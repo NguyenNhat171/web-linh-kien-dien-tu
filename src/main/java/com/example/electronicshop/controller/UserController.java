@@ -27,7 +27,7 @@ public class UserController {
     private final JwtUtils jwtUtils;
 
     @GetMapping(path = "/admin/manage/users")
-    public ResponseEntity<ResponseObject> findAll (@PageableDefault(size = 5) @ParameterObject Pageable pageable){
+    public ResponseEntity<ResponseObject> findAll (@ParameterObject Pageable pageable){
         return userService.findAll(pageable);
     }
 
@@ -41,6 +41,11 @@ public class UserController {
     @DeleteMapping(path = "/admin/manage/users/{userId}")
     public ResponseEntity<?> deactivatedUser (@PathVariable("userId") String userId){
         return userService.deletedUser(userId);
+    }
+
+    @PutMapping (path = "/admin/manage/users/unblockuser/{userId}")
+    public ResponseEntity<?> unblockUser (@PathVariable("userId") String userId){
+        return userService.UnblockUser(userId);
     }
 
     @PutMapping(path = "/users/{userId}")

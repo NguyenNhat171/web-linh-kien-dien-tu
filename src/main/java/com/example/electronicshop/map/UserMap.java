@@ -16,11 +16,9 @@ public class UserMap {
             loginRes.setId(user.getId());
             loginRes.setName(user.getName());
             loginRes.setAddress(user.getAddress());
-            loginRes.setPhonne(user.getPhone());
+            loginRes.setPhone(user.getPhone());
             loginRes.setEmail(user.getEmail());
             loginRes.setRole(user.getRole());
-
-
         }
         return loginRes;
     }

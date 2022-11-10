@@ -6,6 +6,7 @@ import com.example.electronicshop.service.ProductElecService;
 import lombok.AllArgsConstructor;
 import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,7 +30,7 @@ public class ProductElecController {
         return productElecService.findProductByCategoryId(id, pageable);
     }
     @GetMapping(path = "/productelec/all")
-    public ResponseEntity<?> findAll (@ParameterObject Pageable pageable){
+    public ResponseEntity<?> findAll (@PageableDefault(size = 10) @ParameterObject Pageable pageable){
         return productElecService.findAll(pageable);
     }
     @GetMapping(path = "/productelec/{productId}")

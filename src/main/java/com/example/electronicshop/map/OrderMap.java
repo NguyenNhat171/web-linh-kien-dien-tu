@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class OrderMap {
-    public OrderResponse toOrderRes (Order order) {
+    /*public OrderResponse toOrderRes (Order order) {
         return new OrderResponse(order.getId(),order.getUser(),
                 order.getTotalProduct(), order.getTotalPrice(),order.getAddress() ,order.getState(),order.getCreatedDate(),order.getLastModifiedDate());
     }
@@ -18,5 +18,5 @@ public class OrderMap {
                 order.getTotalProduct(), order.getTotalPrice(),order.getAddress() ,order.getState(),order.getCreatedDate(),order.getLastModifiedDate());;
         orderRes.setItems(order.getItems().stream().map(CartMap::toCartItemRes).collect(Collectors.toList()));
         return orderRes;
-    }
+    }*/
 }

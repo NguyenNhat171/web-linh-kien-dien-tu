@@ -21,7 +21,7 @@ public class OrderProduct {
     @Id
     private String id;
     @DocumentReference(lazy = true)
-    private ProductElec item;
+    private ProductElec productElec;
     private long quantity;
     @DocumentReference(lazy = true)
     @JsonIgnore
@@ -29,7 +29,9 @@ public class OrderProduct {
     @Transient
     private BigDecimal Price = BigDecimal.ZERO;
     public BigDecimal getPrice(){
-        BigDecimal originPrice = (item.getPrice().add(BigDecimal.valueOf(quantity)));
+        BigDecimal originPrice = (productElec.getPrice().multiply(BigDecimal.valueOf(quantity)));
         return originPrice;
     }
+
+
 }

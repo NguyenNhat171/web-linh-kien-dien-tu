@@ -27,8 +27,9 @@ public class Order {
     @JsonIgnore
     private User user;
 
-    @DocumentReference(lookup="{'order':?#{#self._id} }", lazy = true)
-    private List<OrderProduct> items = new ArrayList<>();
+    @ReadOnlyProperty
+    @DocumentReference(lookup = "{'order':?#{#self._id} }", lazy = true)
+    private List<OrderProduct> productElecList;
     private String address;
     private String amount;
     private String state;
@@ -45,10 +46,10 @@ public class Order {
 
 
     public long getTotalProduct() {
-        return items.size();
+        return productElecList.size();
     }
     public  BigDecimal getTotalPrice() {
-        totalPrice = items.stream().map(OrderProduct::getPrice)
+        totalPrice = productElecList.stream().map(OrderProduct::getPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
         return totalPrice;
     }

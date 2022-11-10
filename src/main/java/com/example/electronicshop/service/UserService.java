@@ -166,6 +166,18 @@ public class UserService {
         throw new NotFoundException("Can not find use");
     }
 
+    @Transactional
+    public ResponseEntity<?> UnblockUser(String id) {
+        Optional<User> user = userRepository.findUserByIdAndState(id, Constant.USER_NOT_ACTIVE);
+        if (user.isPresent()) {
+            user.get().setState(Constant.USER_NOT_ACTIVE);
+            userRepository.save(user.get());
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("true", "Delete user success", ""));
+        }
+        throw new NotFoundException("Can not find use");
+    }
+
 
     @Transactional
     public ResponseEntity<?> updatePassword(String id, ChangePassword req) {
