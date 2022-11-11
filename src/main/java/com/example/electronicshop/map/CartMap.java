@@ -14,9 +14,8 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 import java.util.stream.Collectors;
 @Service
-@AllArgsConstructor
+
 public class CartMap {
-    private final ProductElecRepository productElecRepository;
 
   public CartResponse toCartRes (Order order) {
         CartResponse res = new CartResponse(order.getId(), order.getTotalProduct(), order.getTotalPrice(), order.getState());

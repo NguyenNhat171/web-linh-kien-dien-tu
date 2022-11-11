@@ -16,32 +16,31 @@ import javax.servlet.http.HttpServletRequest;
 @AllArgsConstructor
 @RequestMapping("/api")
 public class CartController {
-//    private final CartService cartService;
-//    private final JwtUtils jwtUtils;
-//    @GetMapping(path = "/cart")
-//
-//    public ResponseEntity<?> getProductFromCart (HttpServletRequest request){
-//        User user = jwtUtils.getUserFromJWT(jwtUtils.getJwtFromHeader(request));
-//        if (!user.getId().isBlank())
-//            return cartService.getProductFromCart(user.getId());
-//        throw new AppException(HttpStatus.FORBIDDEN.value(), "You don't have permission! Token is invalid");
-//    }
-//
-//    @PostMapping(path = "/cart")
-//    public ResponseEntity<?> addAndUpdateProductToCart (@RequestBody CartRequest req,
-//                                                  HttpServletRequest request){
-//        User user = jwtUtils.getUserFromJWT(jwtUtils.getJwtFromHeader(request));
-//        if (!user.getId().isBlank())
-//            return cartService.addAndUpdateProductToCart(user.getId(), req);
-//        throw new AppException(HttpStatus.FORBIDDEN.value(), "You don't have permission! Token is invalid");
-//    }
-//
-//    @DeleteMapping(path = "/{orderItemId}")
-//    public ResponseEntity<?> deleteProductInCart (@PathVariable("orderItemId") String orderItemId,
-//                                                  HttpServletRequest request){
-//        User user = jwtUtils.getUserFromJWT(jwtUtils.getJwtFromHeader(request));
-//        if (!user.getId().isBlank())
-//            return cartService.deleteProductFromCart(user.getId(), orderItemId);
-//        throw new AppException(HttpStatus.FORBIDDEN.value(), "You don't have permission! Token is invalid");
-//    }
+    private final CartService cartService;
+    private final JwtUtils jwtUtils;
+    @GetMapping(path = "/cart")
+    public ResponseEntity<?> getProductFromCart (HttpServletRequest request){
+        User user = jwtUtils.getUserFromJWT(jwtUtils.getJwtFromHeader(request));
+        if (!user.getId().isBlank())
+            return cartService.getAllProductFromCart(user.getId());
+        throw new AppException(HttpStatus.FORBIDDEN.value(), "You don't have permission! Token is invalid");
+    }
+
+    @PostMapping(path = "/cart")
+    public ResponseEntity<?> addProductToCart (@RequestBody CartRequest req,
+                                                  HttpServletRequest request){
+        User user = jwtUtils.getUserFromJWT(jwtUtils.getJwtFromHeader(request));
+        if (!user.getId().isBlank())
+            return cartService.addProductToCart(user.getId(), req);
+        throw new AppException(HttpStatus.FORBIDDEN.value(), "You don't have permission! Token is invalid");
+    }
+
+    @DeleteMapping(path = "/{orderItemId}")
+    public ResponseEntity<?> deleteProductInCart (@PathVariable("orderItemId") String orderItemId,
+                                                  HttpServletRequest request){
+        User user = jwtUtils.getUserFromJWT(jwtUtils.getJwtFromHeader(request));
+        if (!user.getId().isBlank())
+            return cartService.removeProductFromCart(user.getId(), orderItemId);
+        throw new AppException(HttpStatus.FORBIDDEN.value(), "You don't have permission! Token is invalid");
+    }
 }

@@ -21,6 +21,7 @@ public class OrderProduct {
     @Id
     private String id;
     @DocumentReference(lazy = true)
+    @JsonIgnore
     private ProductElec productElec;
     private long quantity;
     @DocumentReference(lazy = true)
@@ -29,9 +30,13 @@ public class OrderProduct {
     @Transient
     private BigDecimal Price = BigDecimal.ZERO;
     public BigDecimal getPrice(){
-        BigDecimal originPrice = (productElec.getPrice().multiply(BigDecimal.valueOf(quantity)));
+        BigDecimal originPrice = productElec.getPrice().multiply(BigDecimal.valueOf(quantity));
         return originPrice;
     }
 
-
+    public OrderProduct(ProductElec productElec, long quantity, Order order) {
+        this.productElec = productElec;
+        this.quantity = quantity;
+        this.order = order;
+    }
 }

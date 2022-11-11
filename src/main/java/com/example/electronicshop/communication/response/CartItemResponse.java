@@ -21,6 +21,4 @@ public class CartItemResponse {
     private  List<ProductElecImage> image;
     private BigDecimal price;
     private long quantity;
-
-
 }

@@ -170,10 +170,10 @@ public class UserService {
     public ResponseEntity<?> UnblockUser(String id) {
         Optional<User> user = userRepository.findUserByIdAndState(id, Constant.USER_NOT_ACTIVE);
         if (user.isPresent()) {
-            user.get().setState(Constant.USER_NOT_ACTIVE);
+            user.get().setState(Constant.USER_ACTIVE);
             userRepository.save(user.get());
             return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("true", "Delete user success", ""));
+                    new ResponseObject("true", "Unblock user success", user));
         }
         throw new NotFoundException("Can not find use");
     }

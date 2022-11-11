@@ -1,19 +1,7 @@
 package com.example.electronicshop.controller;
 
-import com.example.electronicshop.models.enity.User;
-import com.example.electronicshop.notification.AppException;
-import com.example.electronicshop.repository.OrderRepository;
-import com.example.electronicshop.security.jwt.JwtUtils;
-import com.example.electronicshop.service.OrderService;
 import lombok.AllArgsConstructor;
-import org.springdoc.api.annotations.ParameterObject;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @AllArgsConstructor
