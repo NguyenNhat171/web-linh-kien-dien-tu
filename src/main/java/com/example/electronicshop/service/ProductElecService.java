@@ -139,6 +139,23 @@ public class ProductElecService {
         if (resp != null) return resp;
         throw new NotFoundException("Can not found any product");
     }
+
+    public ResponseEntity<?> findAllProductAdmin() {
+        List<ProductElec> products = productElecRepository.findAll();
+        if (products.size() > 0)
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("true", "Get all user",products));
+        throw new NotFoundException("Can not found any user");
+    }
+
+    public ResponseEntity<?> findAllAdminProductPage(Pageable pageable) {
+        Page<ProductElec> products;
+        products = productElecRepository.findAll(pageable);
+        List<ProductElecListResponse> resList = products.getContent().stream().map(productElecMap::toProductListRes).collect(Collectors.toList());
+        ResponseEntity<?> resp = addPageableToRes(products, resList);
+        if (resp != null) return resp;
+        throw new NotFoundException("Can not found any product");
+    }
     private ResponseEntity<?> addPageableToRes(Page<ProductElec> products, List<ProductElecListResponse> resList) {
         Map<String, Object> resp = new HashMap<>();
         resp.put("list", resList);

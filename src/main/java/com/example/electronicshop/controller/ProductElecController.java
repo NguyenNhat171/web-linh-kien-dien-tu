@@ -33,6 +33,16 @@ public class ProductElecController {
     public ResponseEntity<?> findAll (@PageableDefault(size = 10) @ParameterObject Pageable pageable){
         return productElecService.findAll(pageable);
     }
+
+    @GetMapping(path = "/admin/manage/productelec/productelec/all")
+    public ResponseEntity<?> findAllAdminPage (@PageableDefault(size = 10) @ParameterObject Pageable pageable){
+        return productElecService.findAllAdminProductPage(pageable);
+    }
+    @GetMapping(path = "/admin/manage/productelec/productelec/get/all")
+    public ResponseEntity<?> findAllAdmin (){
+        return productElecService.findAllProductAdmin();
+    }
+
     @GetMapping(path = "/productelec/{productId}")
     public ResponseEntity<?> findProductById (@PathVariable("productId") String productId){
         return productElecService.findProductById(productId);

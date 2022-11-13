@@ -43,6 +43,16 @@ public class UserService {
         throw new NotFoundException("Can not found any user");
     }
 
+    public ResponseEntity<ResponseObject> findAllUserPage(Pageable pageable) {
+        Page<User> users = userRepository.findAll(pageable);
+        List<UserResponse> userResList = users.stream().map(userMapper::thisUserRespone).collect(Collectors.toList());
+        if (userResList.size() > 0)
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("true", "Get all user", userResList));
+        throw new NotFoundException("Can not found any user");
+    }
+
+
 
     public ResponseEntity<?> findUserById(String id) {
         Optional<User> user = userRepository.findUserByIdAndState(id, Constant.USER_ACTIVE);

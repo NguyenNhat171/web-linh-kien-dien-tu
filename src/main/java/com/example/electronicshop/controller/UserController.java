@@ -26,9 +26,14 @@ public class UserController {
     private final UserService userService;
     private final JwtUtils jwtUtils;
 
-    @GetMapping(path = "/admin/manage/users")
+    @GetMapping(path = "/admin/manage/get/users")
     public ResponseEntity<ResponseObject> findAll (){
         return userService.findAll();
+    }
+
+    @GetMapping(path = "/admin/manage/users")
+    public ResponseEntity<ResponseObject> findAllUserPage (@ParameterObject Pageable pageable){
+        return userService.findAllUserPage(pageable);
     }
 
     @PostMapping(path = "/admin/manage/users")
