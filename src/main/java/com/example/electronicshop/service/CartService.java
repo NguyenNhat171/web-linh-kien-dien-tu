@@ -1,10 +1,14 @@
 package com.example.electronicshop.service;
 
 import com.example.electronicshop.communication.request.CartRequest;
+import com.example.electronicshop.communication.request.ReceiveOrderRequest;
 import com.example.electronicshop.communication.response.CartItemResponse;
 import com.example.electronicshop.communication.response.CartResponse;
+import com.example.electronicshop.communication.response.OrderResponse;
+import com.example.electronicshop.communication.response.ReceiveOrderResponse;
 import com.example.electronicshop.config.Constant;
 import com.example.electronicshop.map.CartMap;
+import com.example.electronicshop.models.ReceiveOrder;
 import com.example.electronicshop.models.ResponseObject;
 import com.example.electronicshop.models.enity.Order;
 import com.example.electronicshop.models.enity.OrderProduct;
@@ -39,7 +43,7 @@ public class CartService {
     public ResponseEntity<?> getAllProductFromCart(String userId) {
         Optional<User> user = userRepository.findUserByIdAndState(userId, Constant.USER_ACTIVE);
         if (user.isPresent()) {
-            Optional<Order> order = orderRepository.findOrderByUser_IdAndState(new ObjectId(userId), Constant.ORDER_ENABLE);
+            Optional<Order> order = orderRepository.findOrderByUser_IdAndState(new ObjectId(userId), Constant.ORDER_INCART);
             if (order.isPresent()) {
                 CartResponse res = cartMapper.toCartRes(order.get());
                 return ResponseEntity.status(HttpStatus.OK).body(
@@ -52,15 +56,36 @@ public class CartService {
     public ResponseEntity<?> addProductToCart(String userId, CartRequest req) {
         Optional<User> user = userRepository.findUserByIdAndState(userId, Constant.USER_ACTIVE);
         if (user.isPresent()) {
-            Optional<Order> order = orderRepository.findOrderByUser_IdAndState(new ObjectId(userId), Constant.ORDER_ENABLE);
+            Optional<Order> order = orderRepository.findOrderByUser_IdAndState(new ObjectId(userId), Constant.ORDER_INCART);
             if (order.isPresent()) {
                 Optional<OrderProduct> product = orderProductRepository.findOrderProductByProductElec_IdAndOrder_Id(new ObjectId(req.getProductId()),new ObjectId(order.get().getId()));
               if(product.isPresent())   return countinueUpdateProductInCart(product.get(), req);
                 else return AddProductToExistOrder(order.get(), req);
             }
-            else return AddProductToOrder(user.get(), req);
+            else {
+                return AddProductToOrder(user.get(), req);
+            }
         } throw new NotFoundException("Can not found user with id: "+userId);
     }
+
+    public ResponseEntity<?>AddShiping(String order_id, ReceiveOrder receiveOrderRequest)
+    {
+      Optional<Order> order = orderRepository.findById(order_id);
+      if(order.isPresent()) {
+        order.get().setReceiveOrder(receiveOrderRequest);
+        if(order.get().getReceiveOrder() != null) {
+            order.get().setState(Constant.ORDER_PROCESS);
+            orderRepository.save(order.get());
+            return ResponseEntity.status(HttpStatus.CREATED).body(
+                    new ResponseObject("true", "Add shipping success", ""));
+        }
+        else  return ResponseEntity.status(HttpStatus.CREATED).body(
+                new ResponseObject("false", "Add shipping fail", ""));
+      }
+
+      else throw new NotFoundException("Can not found order with id: ");
+      }
+
 
     @Transactional
     @Synchronized
@@ -69,14 +94,14 @@ public class CartService {
         Optional<ProductElec> productOption = productElecRepository.findById(req.getProductId());
         if (productOption.isPresent()) {
             checkProductQuantity(productOption.get(), req);
-            Order order = new Order(user, Constant.ORDER_ENABLE);
+            Order order = new Order(user, Constant.ORDER_INCART);
             orderRepository.insert(order);
             OrderProduct item = new OrderProduct(productOption.get() ,req.getQuantity(), order);
             orderProductRepository.insert(item);
             CartItemResponse res = CartMap.toCartItemRes(item);
             return ResponseEntity.status(HttpStatus.CREATED).body(
                     new ResponseObject("true", "Add product to cart first time success", res));
-        } else throw new NotFoundException("Can not found product option with id: "+req.getProductId());
+        } else throw new NotFoundException("Can not found product with id: "+req.getProductId());
     }
 
     private ResponseEntity<?> AddProductToExistOrder(Order order, CartRequest req) {
@@ -89,7 +114,7 @@ public class CartService {
             CartItemResponse res = CartMap.toCartItemRes(orderProduct);
             return ResponseEntity.status(HttpStatus.CREATED).body(
                     new ResponseObject("true", "Add product to cart success", res));
-        } else throw new NotFoundException("Can not found product option with id: "+req.getProductId());
+        } else throw new NotFoundException("Can not found product with id: "+req.getProductId());
     }
 
     private void checkProductQuantity(ProductElec productElec, CartRequest req) {

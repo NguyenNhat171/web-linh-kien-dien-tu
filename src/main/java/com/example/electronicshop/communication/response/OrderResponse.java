@@ -1,5 +1,6 @@
 package com.example.electronicshop.communication.response;
 
+import com.example.electronicshop.models.ReceiveOrder;
 import com.example.electronicshop.models.enity.User;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -15,27 +16,24 @@ import java.util.List;
 @NoArgsConstructor
 public class OrderResponse {
     private String id;
-    @DocumentReference
-    private User user;
+    private String userId;
+    private String userName;
     private long totalProduct = 0;
     private BigDecimal totalPrice;
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private List<CartItemResponse> items = new ArrayList<>();
-   private String address;
     private String state;
-    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
-    LocalDateTime createdDate;
-    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
-    LocalDateTime updateDate;
+    private String paymentType;
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private ReceiveOrder receiveOrder;
 
-    public OrderResponse(String id, User user, long totalProduct, BigDecimal totalPrice, String address, String state, LocalDateTime createdDate, LocalDateTime updateDate) {
+    public OrderResponse(String id, String userId, String userName, long totalProduct, BigDecimal totalPrice, String state) {
         this.id = id;
-        this.user = user;
+        this.userId = userId;
+        this.userName = userName;
         this.totalProduct = totalProduct;
         this.totalPrice = totalPrice;
-        this.address = address;
         this.state = state;
-        this.createdDate = createdDate;
-        this.updateDate = updateDate;
     }
+
 }

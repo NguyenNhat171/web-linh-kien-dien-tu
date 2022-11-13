@@ -1,5 +1,7 @@
 package com.example.electronicshop.models.enity;
 
+import com.example.electronicshop.communication.response.ReceiveOrderResponse;
+import com.example.electronicshop.models.ReceiveOrder;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
@@ -32,6 +34,8 @@ public class Order {
     private List<OrderProduct> productElecList;
     private String address;
     private String amount;
+    private String paymentType;
+    private ReceiveOrder receiveOrder = new ReceiveOrder();
     private String state;
     @CreatedDate
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")

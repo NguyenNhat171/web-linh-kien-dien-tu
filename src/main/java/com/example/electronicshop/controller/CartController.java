@@ -1,6 +1,7 @@
 package com.example.electronicshop.controller;
 
 import com.example.electronicshop.communication.request.CartRequest;
+import com.example.electronicshop.models.ReceiveOrder;
 import com.example.electronicshop.models.enity.User;
 import com.example.electronicshop.notification.AppException;
 import com.example.electronicshop.security.jwt.JwtUtils;
@@ -32,6 +33,16 @@ public class CartController {
         User user = jwtUtils.getUserFromJWT(jwtUtils.getJwtFromHeader(request));
         if (!user.getId().isBlank())
             return cartService.addProductToCart(user.getId(), req);
+        throw new AppException(HttpStatus.FORBIDDEN.value(), "You don't have permission! Token is invalid");
+    }
+
+    @PostMapping(path = "/cart/addshipping/{order_id}")
+    public ResponseEntity<?> addShip (@PathVariable("order_id") String orderId,
+                                      @RequestBody ReceiveOrder receiveOrder,
+                                      HttpServletRequest request){
+        User user = jwtUtils.getUserFromJWT(jwtUtils.getJwtFromHeader(request));
+        if (!user.getId().isBlank())
+            return cartService.AddShiping( orderId,receiveOrder);
         throw new AppException(HttpStatus.FORBIDDEN.value(), "You don't have permission! Token is invalid");
     }
 

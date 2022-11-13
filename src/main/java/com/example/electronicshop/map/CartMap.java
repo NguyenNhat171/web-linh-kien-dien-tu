@@ -26,7 +26,7 @@ public class CartMap {
     public static CartItemResponse toCartItemRes(OrderProduct orderProduct) {
         return new CartItemResponse(orderProduct.getId(), orderProduct.getProductElec().getName(),
                 orderProduct.getProductElec().getImages(),
-                orderProduct.getProductElec().getPrice(),
+                orderProduct.getPrice(),
                 orderProduct.getQuantity());
     }
 }

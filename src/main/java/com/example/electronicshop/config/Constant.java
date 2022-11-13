@@ -14,12 +14,13 @@ public class Constant {
     public static final String COMMENT_ENABLE = "enable";
     public static final String COMMENT_BLOCK = "block";
 
-
+    //
+    public static final String CART_ENABLE= "watting";
     //ORDER STATE
-    public static final String ORDER_ENABLE = "enable";
-    public static final String ORDER_CANCEL = "cancel";
-    public static final String ORDER_PROCESS = "process";
-    public static final String ORDER_PAID = "paid";
-    public static final String ORDER_DELIVERY = "delivery";
+    public static final String ORDER_INCART="in cart"; // con trong cart chưa vao order (an khoi orer)
+    public static final String ORDER_CANCEL = "cancel";// huy
+    public static final String ORDER_PROCESS = "process"; // sau khi nhap dia chi cho duyet
+    public static final String ORDER_PAID = "paid"; // da thanh toan tien mat
+    public static final String ORDER_DELIVERY = "delivery";// dang giao hoan
     public static final String ORDER_PENDING = "pending";
 }
