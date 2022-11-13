@@ -25,6 +25,8 @@ public class OrderResponse {
     private String state;
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private ReceiveOrder receiveOrder;
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
+    private LocalDateTime createdDate;
 
     public OrderResponse(String id, String userId, String userName, long totalProduct, BigDecimal totalPrice, String state) {
         this.id = id;
@@ -35,4 +37,13 @@ public class OrderResponse {
         this.state = state;
     }
 
+    public OrderResponse(String id, String userId, String userName, long totalProduct, BigDecimal totalPrice, String state, LocalDateTime createdDate) {
+        this.id = id;
+        this.userId = userId;
+        this.userName = userName;
+        this.totalProduct = totalProduct;
+        this.totalPrice = totalPrice;
+        this.state = state;
+        this.createdDate = createdDate;
+    }
 }
