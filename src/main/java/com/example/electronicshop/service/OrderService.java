@@ -45,6 +45,15 @@ public class OrderService {
                 new ResponseObject("true", "Get orders success", resp));
     }
 
+    public ResponseEntity<?> findAllOrder() {
+        List<Order> orders = orderRepository.findAll();
+        if (orders.isEmpty()) throw new NotFoundException("Can not found any orders");
+
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("true", "Get orders success", orders));
+    }
+
+
 
     public ResponseEntity<?> findOrderById(String id) {
         Optional<Order> order = orderRepository.findById(id);

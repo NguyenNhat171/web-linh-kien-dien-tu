@@ -17,7 +17,6 @@ public class OrderMap {
         OrderResponse orderRes =  new OrderResponse(order.getId(), order.getUser().getId(), order.getUser().getName(),
                 order.getTotalProduct(), order.getTotalPrice(), order.getState());
         orderRes.setItems(order.getProductElecList().stream().map(CartMap::toCartItemRes).collect(Collectors.toList()));
-        orderRes.setPaymentType(order.getPaymentType());
         orderRes.setReceiveOrder(order.getReceiveOrder());
         return orderRes;
     }

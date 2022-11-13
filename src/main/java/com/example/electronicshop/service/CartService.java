@@ -28,6 +28,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -75,9 +76,10 @@ public class CartService {
         order.get().setReceiveOrder(receiveOrderRequest);
         if(order.get().getReceiveOrder() != null) {
             order.get().setState(Constant.ORDER_PROCESS);
+            order.get().setCreatedDate(LocalDateTime.now());
             orderRepository.save(order.get());
             return ResponseEntity.status(HttpStatus.CREATED).body(
-                    new ResponseObject("true", "Add shipping success", ""));
+                    new ResponseObject("true", "Add shipping success", order));
         }
         else  return ResponseEntity.status(HttpStatus.CREATED).body(
                 new ResponseObject("false", "Add shipping fail", ""));

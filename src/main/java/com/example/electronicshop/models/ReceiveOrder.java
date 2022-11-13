@@ -16,4 +16,5 @@ public class ReceiveOrder {
     private String receiveProvince;
     private String receiveDistrict;
     private String receiveVillage;
+    private String paymentType;
 }

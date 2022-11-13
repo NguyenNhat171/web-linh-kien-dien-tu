@@ -23,7 +23,6 @@ public class OrderResponse {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private List<CartItemResponse> items = new ArrayList<>();
     private String state;
-    private String paymentType;
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private ReceiveOrder receiveOrder;
 

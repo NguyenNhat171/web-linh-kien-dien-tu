@@ -34,7 +34,6 @@ public class Order {
     private List<OrderProduct> productElecList;
     private String address;
     private String amount;
-    private String paymentType;
     private ReceiveOrder receiveOrder = new ReceiveOrder();
     private String state;
     @CreatedDate
