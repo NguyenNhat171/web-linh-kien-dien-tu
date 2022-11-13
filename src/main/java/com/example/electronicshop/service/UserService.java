@@ -34,8 +34,8 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
 
-    public ResponseEntity<ResponseObject> findAll(Pageable pageable) {
-        Page<User> users = userRepository.findAll(pageable);
+    public ResponseEntity<ResponseObject> findAll(/*Pageable pageable*/) {
+       List<User> users = userRepository.findAll(/*pageable*/);
         List<UserResponse> userResList = users.stream().map(userMapper::thisUserRespone).collect(Collectors.toList());
         if (userResList.size() > 0)
             return ResponseEntity.status(HttpStatus.OK).body(

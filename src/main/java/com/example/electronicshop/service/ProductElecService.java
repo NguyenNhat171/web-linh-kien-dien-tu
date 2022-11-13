@@ -98,11 +98,8 @@ public class ProductElecService {
     }
 
     public void processUpdate(ProductElecRequest req, ProductElec product) {
-        if (!req.getName().equals(product.getName()))
             product.setName(req.getName());
-        if (!req.getDescription().equals(product.getDescription()))
             product.setDescription(req.getDescription());
-        if (!req.getPrice().equals(product.getPrice()))
             product.setPrice(req.getPrice());
             product.setQuantity(req.getQuantity());
         if (!req.getCategory().equals(product.getCategory().getId())) {
