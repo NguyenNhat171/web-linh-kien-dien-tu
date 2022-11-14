@@ -9,6 +9,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -23,6 +26,17 @@ public class ProductElecController {
     public ResponseEntity<?> updateProduct (@PathVariable("productId") String productId, @RequestBody ProductElecRequest req){
         return productElecService.updateProduct(productId,req);
     }
+
+    @PutMapping("/admin/manage/productelec/updateimage/{productId}")
+    public ResponseEntity<?> updateImageProduct (@PathVariable("productId") String productId, @RequestParam /*(value = "images")*/ List<MultipartFile> file){
+        return productElecService.updateProductImage(productId,file);
+    }
+
+    @PutMapping("/admin/manage/productelec/unblock/{productId}")
+    public ResponseEntity<?> unblockProduct (@PathVariable("productId") String productId){
+        return productElecService.unblockProduct(productId);
+    }
+
 
     @GetMapping(path = "/products/category/{id}")
     public ResponseEntity<?> findByCategoryIdAndBrandId (@PathVariable("id") String id,

@@ -76,7 +76,43 @@ public class ProductElecService {
                 new ResponseObject("false", "Request is null", "")
         );
     }
+    public ResponseEntity<?> updateProductImage(String id, List<MultipartFile> file) {
+        Optional<ProductElec> productElec = productElecRepository.findById(id);
+        if (productElec.isPresent()) {
 
+
+            if (file == null || file.isEmpty())
+                throw new AppException(HttpStatus.BAD_REQUEST.value(), "images is empty");
+            for (int i = 0; i < file.size(); i++) {
+                try {
+                    String url = cloudinary.uploadImage(file.get(i), null);
+                    if (i == 0)
+                        productElec.get().getImages().add(new ProductElecImage(UUID.randomUUID().toString(), url));
+                    else productElec.get().getImages().add(new ProductElecImage(UUID.randomUUID().toString(), url));
+                } catch (IOException e) {
+                    log.error(e.getMessage());
+                    throw new AppException(HttpStatus.EXPECTATION_FAILED.value(), "Error when upload images");
+                }
+                productElecRepository.save(productElec.get());
+            }
+            return ResponseEntity.status(HttpStatus.CREATED).body(
+                    new ResponseObject("true", "Add product successfully ", productElec.get().getImages()));
+        }
+        else
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    new ResponseObject("false", "Cant get product ", ""));
+    }
+
+    public ResponseEntity<ResponseObject> unblockProduct(String id) {
+        Optional<ProductElec> product = productElecRepository.findById(id);
+        if (product.isPresent()) {
+            product.get().setState(Constant.ENABLE);
+            productElecRepository.save(product.get());
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("true", "Delete product successfully ", product)
+            );
+        } throw new NotFoundException("Can not found product with id: "+id);
+    }
     @Transactional
     public ResponseEntity<?> updateProduct(String id, ProductElecRequest req) {
         Optional<ProductElec> product = productElecRepository.findById(id);

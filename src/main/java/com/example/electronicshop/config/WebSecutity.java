@@ -44,7 +44,8 @@ public class WebSecutity {
             "/api/auth/**",
             "/api/comment/**",
             "/api/productelec/**",
-            "/api/cart/**"
+            "/api/cart/**",
+            "/api/orders/**",
 
 
     };

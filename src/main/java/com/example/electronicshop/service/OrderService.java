@@ -92,6 +92,36 @@ public class OrderService {
         throw new NotFoundException("Can not found order with id: " + id);
     }
 
+    public ResponseEntity<?> setOrderDelivery(String id) {
+        Optional<Order> order = orderRepository.findById(id);
+        if (order.isPresent() ) {
+            if (
+                    order.get().getState().equals(Constant.ORDER_PROCESS) ) {
+                order.get().setState(Constant.ORDER_DELIVERY);
+                orderRepository.save(order.get());
+                return ResponseEntity.status(HttpStatus.OK).body(
+                        new ResponseObject("true", "Set state order successfully", order));
+            }
+        } else throw new AppException(HttpStatus.BAD_REQUEST.value(),
+                "You cannot set state order");
+        throw new NotFoundException("Can not found order with id: " + id);
+    }
+
+    public ResponseEntity<?> setOrderPaid(String id) {
+        Optional<Order> order = orderRepository.findById(id);
+        if (order.isPresent() ) {
+            if (order.get().getState().equals(Constant.ORDER_DELIVERY) ) {
+                order.get().setState(Constant.ORDER_PAID);
+                orderRepository.save(order.get());
+                return ResponseEntity.status(HttpStatus.OK).body(
+                        new ResponseObject("true", "Set state order successfully", order));
+            }
+        } else throw new AppException(HttpStatus.BAD_REQUEST.value(),
+                "You cannot set state order");
+        throw new NotFoundException("Can not found order with id: " + id);
+    }
+
+
 
     public ResponseEntity<?> getOrderStatistical(String from, String to, String type) {
         LocalDateTime fromDate = LocalDateTime.now();
