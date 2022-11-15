@@ -10,6 +10,7 @@ import com.example.electronicshop.notification.AppException;
 import com.example.electronicshop.notification.NotFoundException;
 import com.example.electronicshop.repository.OrderRepository;
 import lombok.AllArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -48,9 +49,11 @@ public class OrderService {
     public ResponseEntity<?> findAllOrder() {
         List<Order> orders = orderRepository.findAll();
         if (orders.isEmpty()) throw new NotFoundException("Can not found any orders");
-
+        List<OrderResponse> resList = orders.stream().map(orderMapper::toOrderDetailRes).collect(Collectors.toList());
+        Map<String, Object> resp = new HashMap<>();
+        resp.put("list", resList);
         return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject("true", "Get orders success", orders));
+                new ResponseObject("true", "Get orders success",resp));
     }
 
 
@@ -74,6 +77,18 @@ public class OrderService {
                     new ResponseObject("true", "Get order success", orderRes));
         }
         throw new NotFoundException("Can not found order with id: " + id);
+    }
+
+    public ResponseEntity<?> findAllOrderByUserId(String userId) {
+        List<Order> orders = orderRepository.findOrderByUser_Id(new ObjectId(userId));
+        List<OrderResponse> resList = orders.stream().map(orderMapper::toOrderDetailRes).collect(Collectors.toList());
+        Map<String, Object> resp = new HashMap<>();
+        resp.put("list", resList);
+        if(orders.size()>0){
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("true", "Get order success", resp));
+    }
+        throw new NotFoundException("Can not found any order " );
     }
 
 

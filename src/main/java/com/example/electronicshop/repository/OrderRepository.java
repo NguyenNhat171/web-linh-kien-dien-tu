@@ -9,12 +9,14 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface OrderRepository  extends MongoRepository<Order, String> {
     Optional<Order> findOrderByUser_IdAndState(ObjectId userId, String state);
     Optional<Order> findByIdAndState(String id, String state);
+    List<Order> findOrderByUser_Id(ObjectId userId);
     Page<Order> findAllByState(String state, Pageable pageable);
     Page<Order> findAllByCreatedDateBetweenAndState(LocalDateTime from, LocalDateTime to, String state, Pageable pageable);
 }
