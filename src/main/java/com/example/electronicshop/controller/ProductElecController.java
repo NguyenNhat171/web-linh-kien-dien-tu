@@ -71,7 +71,7 @@ public class ProductElecController {
     public ResponseEntity<ResponseObject> deleteProduct(@PathVariable("productId") String productId) {
         return productElecService.destroyProduct(productId);
     }
-    @PostMapping(value = "admin/manage/products/uploadimages/{productId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/admin/manage/products/uploadimages/{productId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> addImages(@PathVariable("productId") String id ,
                                        @ModelAttribute ImageRequest req) {
         return productElecService.addImagesToProduct(id, req.getFiles());
