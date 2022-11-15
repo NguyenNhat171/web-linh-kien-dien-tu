@@ -272,7 +272,7 @@ public class ProductElecService {
         Optional<ProductElec> product = productElecRepository.findById(id);
         if (product.isPresent()) {
             try {
-                if (files == null || files.isEmpty() ) throw new AppException(HttpStatus.BAD_REQUEST.value(), "Images and color is require");
+                if (files == null || files.isEmpty() ) throw new AppException(HttpStatus.BAD_REQUEST.value(), "Images is require");
                 files.forEach(f -> {
                     try {
                         String url = cloudinary.uploadImage(f, null);
