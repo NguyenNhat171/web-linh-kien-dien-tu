@@ -1,5 +1,6 @@
 package com.example.electronicshop.controller;
 
+import com.example.electronicshop.communication.request.ImageRequest;
 import com.example.electronicshop.communication.request.ProductElecRequest;
 import com.example.electronicshop.models.ResponseObject;
 import com.example.electronicshop.service.ProductElecService;
@@ -7,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -68,6 +70,16 @@ public class ProductElecController {
     @DeleteMapping("/admin/manage/productelec/delete/{productId}")
     public ResponseEntity<ResponseObject> deleteProduct(@PathVariable("productId") String productId) {
         return productElecService.destroyProduct(productId);
+    }
+    @PostMapping(value = "/manage/products/uploadimages/{productId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> addImages(@PathVariable("productId") String id ,
+                                       @ModelAttribute ImageRequest req) {
+        return productElecService.addImagesToProduct(id, req.getFiles());
+    }
+
+    @DeleteMapping("/admin/manage/productelec/deleteimages/{productId}")
+    public ResponseEntity<?> deleteImageProduct(@PathVariable("productId") String productId, @RequestBody ImageRequest req) {
+        return productElecService.deleteImageFromProduct(productId, req.getImageId());
     }
 
 }

@@ -245,4 +245,51 @@ public class ProductElecService {
             );
         } throw new NotFoundException("Can not found product with id: "+id);
     }
+
+    @Transactional
+    public ResponseEntity<?> deleteImageFromProduct(String id, String imageId) {
+        Optional<ProductElec> product = productElecRepository.findById(id);
+        if (product.isPresent() && !product.get().getImages().isEmpty()) {
+            try {
+                Optional<ProductElecImage> checkDelete = product.get().getImages().stream().filter(i -> i.getImageId().equals(imageId)).findFirst();
+                if (checkDelete.isPresent()) {
+                    cloudinary.deleteImage(checkDelete.get().getUrl());
+                    product.get().getImages().remove(checkDelete.get());
+                    productElecRepository.save(product.get());
+                    return ResponseEntity.status(HttpStatus.OK).body(
+                            new ResponseObject("true", "Delete image successfully", imageId)
+                    );
+                } else throw new NotFoundException("Can not found image in product with id: " + imageId);
+            } catch (Exception e) {
+                log.error(e.getMessage());
+                throw new NotFoundException("Can not found product with id: " + id);
+            }
+        } throw new NotFoundException("Can not found any image or product with id: " + id);
+    }
+
+    @Transactional
+    public ResponseEntity<?> addImagesToProduct(String id, List<MultipartFile> files) {
+        Optional<ProductElec> product = productElecRepository.findById(id);
+        if (product.isPresent()) {
+            try {
+                if (files == null || files.isEmpty() ) throw new AppException(HttpStatus.BAD_REQUEST.value(), "Images and color is require");
+                files.forEach(f -> {
+                    try {
+                        String url = cloudinary.uploadImage(f, null);
+                        product.get().getImages().add(new ProductElecImage(UUID.randomUUID().toString(), url));
+                    } catch (IOException e) {
+                        log.error(e.getMessage());
+                        throw new AppException(HttpStatus.EXPECTATION_FAILED.value(), "Error when upload images");
+                    }
+                    productElecRepository.save(product.get());
+                });
+                return ResponseEntity.status(HttpStatus.OK).body(
+                        new ResponseObject("true", "Add image to product successfully", product.get().getImages())
+                );
+            } catch (Exception e) {
+                log.error(e.getMessage());
+                throw new NotFoundException("Error when save image: " + e.getMessage());
+            }
+        } throw new NotFoundException("Can not found product with id: " + id);
+    }
 }
