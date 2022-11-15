@@ -71,10 +71,10 @@ public class ProductElecController {
     public ResponseEntity<ResponseObject> deleteProduct(@PathVariable("productId") String productId) {
         return productElecService.destroyProduct(productId);
     }
-    @PostMapping(value = "/admin/manage/products/uploadimages/{productId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> addImages(@PathVariable("productId") String id ,
+    @PostMapping(value = "/admin/manage/productelec/uploadimages/{productId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> addImages(@PathVariable("productId") String productId ,
                                        @ModelAttribute ImageRequest req) {
-        return productElecService.addImagesToProduct(id, req.getFiles());
+        return productElecService.addImagesToProduct(productId, req.getFiles());
     }
 
     @DeleteMapping("/admin/manage/productelec/deleteimages/{productId}")
