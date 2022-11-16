@@ -100,7 +100,7 @@ public class OrderService {
                 order.get().setState(Constant.ORDER_CANCEL);
                 orderRepository.save(order.get());
                     return ResponseEntity.status(HttpStatus.OK).body(
-                            new ResponseObject("true", "Cancel order successfully", ""));
+                            new ResponseObject("true", "Cancel order successfully", order));
                 }
             } else throw new AppException(HttpStatus.BAD_REQUEST.value(),
                     "You cannot cancel or refund while the order is still processing!");
