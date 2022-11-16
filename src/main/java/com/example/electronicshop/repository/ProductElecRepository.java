@@ -24,4 +24,6 @@ public interface ProductElecRepository extends MongoRepository<ProductElec, Stri
     Page<ProductElec> findProductsByCategory(ObjectId id, Pageable pageable);
     Page<ProductElec> findAllBy(TextCriteria textCriteria, Pageable pageable);
     List<ProductElec> findAllByIdIsIn(List<String> productIds);
+
+    List<ProductElec> findProductElecByCategory(ObjectId id);
 }

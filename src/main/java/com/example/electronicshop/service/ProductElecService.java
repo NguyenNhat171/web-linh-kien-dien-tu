@@ -57,6 +57,28 @@ public class ProductElecService {
         if (resp != null) return resp;
         throw new NotFoundException("Can not found any product with category or brand id: "+id);
     }
+
+    public ResponseEntity<?> findProductElecByCategoryId(String id) {
+        List<ProductElec> products;
+        try {
+            Optional<Category> category = categoryRepository.findCategoryByIdAndState(id, Constant.ENABLE);
+            if (category.isPresent()) {
+                products = productElecRepository.findProductElecByCategory(new ObjectId(id));
+            }
+            else{
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                        new ResponseObject("false", "Request is null", ""));
+            }
+        } catch (Exception e) {
+            throw new AppException(HttpStatus.BAD_REQUEST.value(), "Error when finding");
+        }
+        List<ProductElecListResponse> resList = products.stream().map(productElecMap::toProductListRes).collect(Collectors.toList());
+
+        if (resList != null)   return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                new ResponseObject("true", "GetProduct", resList));
+    ;
+        throw new NotFoundException("Can not found any product with category or brand id: "+id);
+    }
     public ResponseEntity<?> addProduct(ProductElecRequest req) {
         List<ProductElecImage> images = new ArrayList<>();
         if (req != null) {

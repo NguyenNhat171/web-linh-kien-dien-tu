@@ -40,10 +40,14 @@ public class ProductElecController {
     }
 
 
-    @GetMapping(path = "/products/category/{id}")
+    @GetMapping(path = "/productelec/category/{id}")
     public ResponseEntity<?> findByCategoryIdAndBrandId (@PathVariable("id") String id,
                                                          @ParameterObject Pageable pageable){
         return productElecService.findProductByCategoryId(id, pageable);
+    }
+    @GetMapping(path = "/productelec/getcategory/{id}")
+    public ResponseEntity<?> findByCategoryId (@PathVariable("id") String id){
+        return productElecService.findProductElecByCategoryId(id);
     }
     @GetMapping(path = "/productelec/all")
     public ResponseEntity<?> findAll (@PageableDefault(size = 10) @ParameterObject Pageable pageable){
