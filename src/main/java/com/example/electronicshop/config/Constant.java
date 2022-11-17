@@ -7,6 +7,8 @@ public class Constant {
     public static final String ROLE_ADMIN = "role_admin";
     public static final String ROLE_USER = "role_user";
 
+    public static final String ROLE_SHIPPER = "role_shipper";
+
     //USER STATE
     public static final String USER_ACTIVE = "active";
     public static final String USER_NOT_ACTIVE = "block";
@@ -14,6 +16,7 @@ public class Constant {
     public static final String COMMENT_ENABLE = "enable";
     public static final String COMMENT_BLOCK = "block";
 
+    public static final String COMMENT_PROCESS = "process"; //comment chờ duyệt
     //
     public static final String CART_ENABLE= "watting";
     //ORDER STATE
