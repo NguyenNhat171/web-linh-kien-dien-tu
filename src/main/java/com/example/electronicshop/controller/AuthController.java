@@ -31,6 +31,11 @@ public class AuthController {
     public ResponseEntity<ResponseObject> register( @RequestBody Register registerReq) {
         return authService.register(registerReq);
     }
+
+    @PostMapping("/register/shipper")
+    public ResponseEntity<ResponseObject> registerShipper( @RequestBody Register registerReq) {
+        return authService.registerShipper(registerReq);
+    }
     @PostMapping("/verify")
     public ResponseEntity<?> verify(@Valid @RequestBody VerifyCodeRequest req) {
         return authService.verifyCode(req);

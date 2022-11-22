@@ -43,4 +43,13 @@ public class UserMap {
         }
         return null;
     }
+    public User toUserShipper(Register req) {
+        if (req != null) {
+
+            return new User(req.getName(), req.getEmail(), req.getPassword(), req.getPhone(),
+                    req.getAddress(), Constant.ROLE_SHIPPER, Constant.USER_ACTIVE, ESocial.LOCAL);
+        }
+        return null;
+    }
+
 }

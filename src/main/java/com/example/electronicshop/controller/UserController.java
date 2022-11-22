@@ -2,6 +2,7 @@ package com.example.electronicshop.controller;
 
 import com.example.electronicshop.communication.request.ChangePassword;
 import com.example.electronicshop.communication.request.Register;
+import com.example.electronicshop.communication.request.RoleUserRequest;
 import com.example.electronicshop.communication.request.UserRequest;
 import com.example.electronicshop.models.ResponseObject;
 import com.example.electronicshop.models.enity.User;
@@ -31,6 +32,21 @@ public class UserController {
         return userService.findAll();
     }
 
+    @GetMapping(path = "/admin/manage/get/usershipper")
+    public ResponseEntity<ResponseObject> findAllShipper (@ParameterObject @PageableDefault(size = 10)  Pageable pageable){
+        return userService.findAllUserShipper(pageable);
+    }
+
+    @GetMapping(path = "/admin/manage/get/userrole")
+    public ResponseEntity<ResponseObject> findAllUserRole (@ParameterObject @PageableDefault(size = 10)  Pageable pageable){
+        return userService.findAllUserRoleUser(pageable);
+    }
+
+    @GetMapping(path = "/admin/manage/get/admin")
+    public ResponseEntity<ResponseObject> findAllAdmin (@ParameterObject @PageableDefault(size = 10)  Pageable pageable){
+        return userService.findAllAdmin(pageable);
+    }
+
     @GetMapping(path = "/admin/manage/users")
     public ResponseEntity<ResponseObject> findAllUserPage (@ParameterObject Pageable pageable){
         return userService.findAllUserPage(pageable);
@@ -41,6 +57,10 @@ public class UserController {
         return userService.addUser(req);
     }
 
+    @PutMapping(path = "/admin/manage/users/setrole/{userId}")
+    public ResponseEntity<?> setUserRole (@PathVariable("userId") String userId,@RequestBody RoleUserRequest req){
+        return userService.setRoleByAdmin(userId,req);
+    }
 
 
     @DeleteMapping(path = "/admin/manage/users/{userId}")

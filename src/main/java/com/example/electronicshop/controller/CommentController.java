@@ -30,6 +30,12 @@ public class CommentController {
         return commentService.findByProductId(productId, pageable);
     }
 
+    @GetMapping(path = "/admin/manage//comment/findall")
+    public ResponseEntity<?> findAllComment (){
+        return commentService.findAllComment();
+    }
+
+
     @PostMapping(path = "/comment")
     public ResponseEntity<?> addComment (@Valid @RequestBody CommentRequest req,
                                         HttpServletRequest request){
@@ -37,6 +43,12 @@ public class CommentController {
         if (!user.getId().isBlank())
             return commentService.addComment(user.getId(), req);
         throw new AppException(HttpStatus.FORBIDDEN.value(), "You don't have permission! Token is invalid");
+    }
+
+    @PutMapping("/admin/manage/comment/setenable/{CommentId}")
+    public ResponseEntity<?> setEnableComment (@PathVariable("CommentId") String CommentId)
+    {
+        return commentService.setEnableComment(CommentId);
     }
     @DeleteMapping("/admin/manage/comment/block/{CommentId}")
     public ResponseEntity<?> blockComment (@PathVariable("CommentId") String CommentId)

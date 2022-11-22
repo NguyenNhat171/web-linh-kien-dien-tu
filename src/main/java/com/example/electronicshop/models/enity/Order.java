@@ -47,6 +47,10 @@ public class Order {
     @Transient
     private BigDecimal totalPrice;
 
+    @DocumentReference(lazy = true)
+    @JsonIgnore
+    private User shipper;
+
 
     public long getTotalProduct() {
         return productElecList.size();

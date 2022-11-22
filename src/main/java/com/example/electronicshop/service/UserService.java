@@ -2,6 +2,7 @@ package com.example.electronicshop.service;
 
 import com.example.electronicshop.communication.request.ChangePassword;
 import com.example.electronicshop.communication.request.Register;
+import com.example.electronicshop.communication.request.RoleUserRequest;
 import com.example.electronicshop.communication.request.UserRequest;
 import com.example.electronicshop.communication.response.UserResponse;
 import com.example.electronicshop.config.Constant;
@@ -52,6 +53,52 @@ public class UserService {
         throw new NotFoundException("Can not found any user");
     }
 
+
+    public ResponseEntity<ResponseObject> findAllUserShipper(Pageable pageable) {
+        Page<User> users = userRepository.findUsersByRole(Constant.ROLE_SHIPPER,pageable);
+        List<UserResponse> userResList = users.stream().map(userMapper::thisUserRespone).collect(Collectors.toList());
+        if (userResList.size() > 0)
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("true", "Get all user", userResList));
+        throw new NotFoundException("Can not found any user");
+    }
+
+    public ResponseEntity<ResponseObject> findAllUserRoleUser(Pageable pageable) {
+        Page<User> users = userRepository.findUsersByRole(Constant.ROLE_USER,pageable);
+        List<UserResponse> userResList = users.stream().map(userMapper::thisUserRespone).collect(Collectors.toList());
+        if (userResList.size() > 0)
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("true", "Get all user", userResList));
+        throw new NotFoundException("Can not found any user");
+    }
+
+    public ResponseEntity<ResponseObject> findAllAdmin(Pageable pageable) {
+        Page<User> users = userRepository.findUsersByRole(Constant.ROLE_ADMIN,pageable);
+        List<UserResponse> userResList = users.stream().map(userMapper::thisUserRespone).collect(Collectors.toList());
+        if (userResList.size() > 0)
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("true", "Get all user", userResList));
+        throw new NotFoundException("Can not found any user");
+    }
+
+
+
+
+
+    public  ResponseEntity<?> setRoleByAdmin(String id, RoleUserRequest roleUserRequest)
+{
+ Optional<User>user = userRepository.findById(id);
+ if(user.isPresent()) {
+     user.get().setRole(roleUserRequest.getRole());
+     userRepository.save(user.get());
+     UserResponse res = userMapper.thisUserRespone(user.get());
+     return ResponseEntity.status(HttpStatus.OK).body(
+             new ResponseObject("true", "Get user success", res));
+ }
+ else
+     return ResponseEntity.status(HttpStatus.OK).body(
+             new ResponseObject("false", "Can't not find user ", ""));
+}
 
 
     public ResponseEntity<?> findUserById(String id) {

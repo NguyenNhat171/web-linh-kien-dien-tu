@@ -74,6 +74,18 @@ public class AuthService {
 
     }
 
+    public ResponseEntity<ResponseObject> registerShipper(Register req) {
+        if (userRepository.existsByEmail(req.getEmail()))
+            throw new AppException(HttpStatus.CONFLICT.value(), "Email  exists");
+        req.setPassword(passwordEncoder.encode(req.getPassword()));
+        User user = userMapper.toUserShipper(req);
+        user.setToken(null);
+        userRepository.save(user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                new ResponseObject("true", "Register ", user)
+        );
+    }
+
 
     public ResponseEntity<ResponseObject> register(Register req) {
         if (userRepository.existsByEmail(req.getEmail()))

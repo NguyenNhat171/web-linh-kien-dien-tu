@@ -2,15 +2,18 @@ package com.example.electronicshop.service;
 
 import com.example.electronicshop.communication.request.CommentRequest;
 import com.example.electronicshop.communication.response.CommentResponse;
+import com.example.electronicshop.communication.response.OrderResponse;
 import com.example.electronicshop.config.Constant;
 import com.example.electronicshop.map.CommentMap;
 import com.example.electronicshop.models.ResponseObject;
 import com.example.electronicshop.models.enity.Comment;
+import com.example.electronicshop.models.enity.Order;
 import com.example.electronicshop.models.enity.ProductElec;
 import com.example.electronicshop.models.enity.User;
 import com.example.electronicshop.notification.AppException;
 import com.example.electronicshop.notification.NotFoundException;
 import com.example.electronicshop.repository.CommentRepository;
+import com.example.electronicshop.repository.OrderRepository;
 import com.example.electronicshop.repository.ProductElecRepository;
 import com.example.electronicshop.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -39,6 +42,7 @@ public class CommentService {
     private final UserRepository userRepository;
     private final ProductElecRepository productRepository;
     private final CommentMap commentMap;
+    private final OrderRepository orderRepository;
 
     public ResponseEntity<?> findByProductId(String productId, Pageable pageable) {
         Page<Comment> comment= commentRepository.findAllByProduct_IdAndState(new ObjectId(productId),Constant.COMMENT_ENABLE, pageable);
@@ -64,14 +68,18 @@ public class CommentService {
         if (user.isPresent()) {
             Optional<ProductElec> product = productRepository.findProductByIdAndState(req.getProductId(), Constant.ENABLE);
             if (product.isPresent()) {
-
-                Comment newComment = new Comment(req.getContent(), req.getRate(), product.get(), user.get(), Constant.COMMENT_ENABLE, LocalDateTime.now());
+            Optional<Order>order= orderRepository.findOrderByUser_IdAndState(new ObjectId(userId),Constant.ORDER_PAID);
+            if(order.isPresent()) {
+                Comment newComment = new Comment(req.getContent(), req.getRate(), product.get(), user.get(), Constant.COMMENT_PROCESS, LocalDateTime.now());
                 commentRepository.save(newComment);
-                int rate = ((product.get().getRate() * product.get().getRateCount()) + req.getRate())/ (product.get().getRateCount());
+                int rate = ((product.get().getRate() * product.get().getRateCount()) + req.getRate()) / (product.get().getRateCount());
                 product.get().setRate(rate);
                 productRepository.save(product.get());
                 return ResponseEntity.status(HttpStatus.OK).body(
                         new ResponseObject("true", "Add comment success ", newComment));
+            }
+            else return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("false", "You must buy a new product to comment this product"," "));
             } throw new NotFoundException("Can not found product with id: " + req.getProductId());
         } throw new NotFoundException("Can not found user with id: " + userId);
     }
@@ -85,6 +93,28 @@ public class CommentService {
                     new ResponseObject("true", "Block comment successfully ", "")
             );
         } throw new NotFoundException("Can not found comment with id: "+id);
+    }
+
+    public ResponseEntity<ResponseObject> setEnableComment(String id) {
+        Optional<Comment> comment =commentRepository.findCommentByIdAndState(id,Constant.COMMENT_PROCESS);
+        if (comment.isPresent()) {
+            comment.get().setState(Constant.COMMENT_ENABLE);
+            commentRepository.save(comment.get());
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("true", " Comment successfully ", comment)
+            );
+        } throw new NotFoundException("Can not found comment with id: "+id);
+    }
+    public ResponseEntity<ResponseObject> findAllComment(){
+        List<Comment> comment = commentRepository.findAll();
+        if(comment.size()>0)
+        {
+            return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("true", "find all comment successfully ", comment));
+        }
+        else
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("flase", "can't find all comment ", ""));
     }
     @Transactional
     public ResponseEntity<ResponseObject> deleteCommemt(String id) {
