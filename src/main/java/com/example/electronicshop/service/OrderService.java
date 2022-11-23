@@ -129,7 +129,7 @@ public class OrderService {
 
     public ResponseEntity<?> findOrderByShipperId(String id, String userId) {
         Optional<Order> order = orderRepository.findById(id);
-        if (order.isPresent() && order.get().getUser().getId().equals(userId)) {
+        if (order.isPresent() && order.get().getShipper().getId().equals(userId)) {
 //            OrderResponse orderRes = orderMapper.toOrderDetailRes(order.get());
 
             OrderResponse orderRes = orderMapper.toOrderDetailShipperRes(order.get());
