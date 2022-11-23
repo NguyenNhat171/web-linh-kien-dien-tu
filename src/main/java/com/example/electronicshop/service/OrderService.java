@@ -56,6 +56,16 @@ public class OrderService {
                 new ResponseObject("true", "Get orders success",resp));
     }
 
+    public ResponseEntity<?> findAllOrderPage(Pageable pageable) {
+        Page<Order> orders = orderRepository.findAll(pageable);
+        if (orders.isEmpty()) throw new NotFoundException("Can not found any orders");
+        List<OrderResponse> resList = orders.stream().map(orderMapper::toOrderDetailShipperRes).collect(Collectors.toList());
+        Map<String, Object> resp = new HashMap<>();
+        resp.put("list", resList);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new ResponseObject("true", "Get orders success",resp));
+    }
+
     public  ResponseEntity<?> findAllOrderStateProcess(Pageable pageable){
         Page<Order> orders = orderRepository.findAllByState(Constant.ORDER_PROCESS,pageable);
         if (orders.isEmpty()) throw new NotFoundException("Can not found any orders");
