@@ -223,6 +223,7 @@ public class OrderService {
         if (order.isPresent() ) {
             if (order.get().getState().equals(Constant.ORDER_DELIVERY) ) {
                 order.get().setState(Constant.ORDER_PAID);
+                order.get().setLastModifiedDate(LocalDateTime.now());
                 orderRepository.save(order.get());
                 return ResponseEntity.status(HttpStatus.OK).body(
                         new ResponseObject("true", "Set state order successfully", order));
@@ -231,6 +232,25 @@ public class OrderService {
                 "You cannot set state order");
         throw new NotFoundException("Can not found order with id: " + id);
     }
+//    public String checkingUpdateQuantityProduct(Order order, boolean isPaid) {
+//        order.getProductElecList().forEach(item -> {
+//                if (isPaid) {
+//                    if (item.getColor().equals(i.getColor()) && i.getStock() < item.getQuantity()) {
+//                        orderRepository.save(order);
+//                        throw new AppException(HttpStatus.CONFLICT.value(),
+//                                "Quantity exceeds the available stock on hand at Product:" +
+//                                        item.getItem().getProduct().getName());
+//                    } else i.setStock(i.getStock() - item.getQuantity());
+//                } else i.setStock(i.getStock() + item.getQuantity());
+//            });
+//            try {
+//                productOptionRepository.save(item.getItem());
+//            } catch (MongoWriteException e) {
+//                throw new AppException(HttpStatus.EXPECTATION_FAILED.value(), "Failed when update quantity");
+//            }
+//        });
+//        return null;
+//    }
 
     public ResponseEntity<?> cancelOrderbyShipper(String id) {
         Optional<Order> order = orderRepository.findById(id);

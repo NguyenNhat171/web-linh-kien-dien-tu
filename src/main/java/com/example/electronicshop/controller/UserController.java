@@ -53,7 +53,7 @@ public class UserController {
     }
 
     @GetMapping(path = "/admin/manage/users")
-    public ResponseEntity<ResponseObject> findAllUserPage (@ParameterObject Pageable pageable){
+    public ResponseEntity<ResponseObject> findAllUserPage (@ParameterObject @PageableDefault(size = 5)  Pageable pageable){
         return userService.findAllUserPage(pageable);
     }
 
