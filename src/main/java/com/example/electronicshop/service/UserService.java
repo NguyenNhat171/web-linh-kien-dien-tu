@@ -44,6 +44,17 @@ public class UserService {
         throw new NotFoundException("Can not found any user");
     }
 
+
+
+    public ResponseEntity<ResponseObject> findAllByRole(String role,Pageable pageable) {
+        Page<User> users = userRepository.findUsersByRole(role,pageable);
+        List<UserResponse> userResList = users.stream().map(userMapper::thisUserRespone).collect(Collectors.toList());
+        if (userResList.size() > 0)
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ResponseObject("true", "Get all user", userResList));
+        throw new NotFoundException("Can not found any user");
+    }
+
     public ResponseEntity<ResponseObject> findAllUserPage(Pageable pageable) {
         Page<User> users = userRepository.findAll(pageable);
         List<UserResponse> userResList = users.stream().map(userMapper::thisUserRespone).collect(Collectors.toList());

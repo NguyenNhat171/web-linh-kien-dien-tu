@@ -32,6 +32,11 @@ public class UserController {
         return userService.findAll();
     }
 
+    @GetMapping(path = "/admin/manage/getrole/users")
+    public ResponseEntity<ResponseObject> findUserByRole (@RequestParam(defaultValue = "") String role,@ParameterObject @PageableDefault(size = 10)  Pageable pageable){
+        return userService.findAllByRole(role,pageable);
+    }
+
     @GetMapping(path = "/admin/manage/get/usershipper")
     public ResponseEntity<ResponseObject> findAllShipper (@ParameterObject @PageableDefault(size = 10)  Pageable pageable){
         return userService.findAllUserShipper(pageable);

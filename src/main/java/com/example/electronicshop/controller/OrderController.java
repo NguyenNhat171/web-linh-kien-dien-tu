@@ -22,8 +22,8 @@ public class OrderController {
     private final OrderService orderService;
 
     @GetMapping(path = "/admin/manage/orders")
-    public ResponseEntity<?> findAllState (@RequestBody String state,
-                                      @PageableDefault(size = 10) @ParameterObject Pageable pageable){
+    public ResponseEntity<?> findAllState (@RequestParam(defaultValue = "")String state,
+                                      @PageableDefault(size = 5) @ParameterObject Pageable pageable){
         return orderService.findAllState(state, pageable);
     }
 
