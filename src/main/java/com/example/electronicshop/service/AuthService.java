@@ -157,7 +157,7 @@ public class AuthService {
         String token = String.valueOf(ThreadLocalRandom.current().nextInt(100000, 1000000));
         Map<String, Object> model = new HashMap<>();
         model.put("token", token);
-        user.setToken(new Token(token, LocalDateTime.now().plusMinutes(30)));
+        user.setToken(new Token(token, LocalDateTime.now().plusMinutes(10)));
         userRepository.save(user);
         emailService.sendEmail(user.getEmail(), model, MailType.VetifyShop);
     }
