@@ -24,15 +24,15 @@ public class AuthController {
         return authService.login(loginReq);
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<ResponseObject> register( @RequestBody Register registerReq) {
-        return authService.register(registerReq);
-    }
+//    @PostMapping("/register")
+//    public ResponseEntity<ResponseObject> register( @RequestBody Register registerReq) {
+//        return authService.register(registerReq);
+//    }
 
-    @PostMapping("/register/shipper")
-    public ResponseEntity<ResponseObject> registerShipper( @RequestBody Register registerReq) {
-        return authService.registerShipper(registerReq);
-    }
+//    @PostMapping("/register/shipper")
+//    public ResponseEntity<ResponseObject> registerShipper( @RequestBody Register registerReq) {
+//        return authService.registerShipper(registerReq);
+//    }
     @PostMapping("/verify")
     public ResponseEntity<?> verify(@Valid @RequestBody VerifyCodeRequest req) {
         return authService.verifyCode(req);
@@ -42,15 +42,19 @@ public class AuthController {
     public ResponseEntity<?> registermail( @RequestBody Register registerReq) {
         return authService.registerWithMail(registerReq);
     }
+    @PostMapping("/registermail/shipper")
+    public ResponseEntity<ResponseObject> registerMailShipper( @RequestBody Register registerReq) {
+        return authService.registerShipperWithMail(registerReq);
+    }
     @PostMapping("/getotp")
     public ResponseEntity<?> getOTPMail(@RequestParam(value ="email")String email) {
         if (!email.isBlank()) return authService.sendMailGetOTP(email);
         throw new AppException(HttpStatus.BAD_REQUEST.value(), "Email is required");
     }
-    @PostMapping("/reset")
-    public ResponseEntity<?> reset(@RequestBody VerifyCodeRequest req) {
-        if (!req.getEmail().isBlank()) return authService.reset(req.getEmail());
-        throw new AppException(HttpStatus.BAD_REQUEST.value(), "Email is required");
-    }
+//    @PostMapping("/reset")
+//    public ResponseEntity<?> reset(@RequestBody VerifyCodeRequest req) {
+//        if (!req.getEmail().isBlank()) return authService.reset(req.getEmail());
+//        throw new AppException(HttpStatus.BAD_REQUEST.value(), "Email is required");
+//    }
 
 }

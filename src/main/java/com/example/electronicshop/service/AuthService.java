@@ -119,6 +119,23 @@ public class AuthService {
         );
     }
 
+    public ResponseEntity<ResponseObject> registerShipperWithMail(Register req) {
+        if (userRepository.existsByEmail(req.getEmail()))
+            throw new AppException(HttpStatus.CONFLICT.value(), "Email already exists");
+        req.setPassword(passwordEncoder.encode(req.getPassword()));
+        User user = userMapper.toUserShipperMail(req);
+        if (user != null) {
+            try {
+                sendVerifyMail(user);
+            } catch (Exception e) {
+                throw new AppException(HttpStatus.EXPECTATION_FAILED.value(), e.getMessage());
+            }
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                new ResponseObject("true", "Register successfully ", "")
+        );
+    }
+
     public ResponseEntity<?> reset(String email) {
         Optional<User> user = userRepository.findUserByEmailAndState(email, Constant.USER_ACTIVE);
         if (user.isPresent()) {
