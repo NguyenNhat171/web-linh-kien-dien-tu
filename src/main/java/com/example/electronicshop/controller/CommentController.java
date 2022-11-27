@@ -30,7 +30,7 @@ public class CommentController {
         return commentService.findByProductId(productId, pageable);
     }
 
-    @GetMapping(path = "/admin/manage//comment/findall")
+    @GetMapping(path = "/admin/manage/comment/findall")
     public ResponseEntity<?> findAllComment (){
         return commentService.findAllComment();
     }
