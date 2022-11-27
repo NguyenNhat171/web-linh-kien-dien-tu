@@ -1,9 +1,6 @@
 package com.example.electronicshop.service;
 
-import com.example.electronicshop.communication.request.ChangePassword;
-import com.example.electronicshop.communication.request.Register;
-import com.example.electronicshop.communication.request.RoleUserRequest;
-import com.example.electronicshop.communication.request.UserRequest;
+import com.example.electronicshop.communication.request.*;
 import com.example.electronicshop.communication.response.UserResponse;
 import com.example.electronicshop.config.Constant;
 import com.example.electronicshop.map.UserMap;
@@ -199,11 +196,12 @@ public class UserService {
                 new ResponseObject("failed", "Cannot update email user ", "")
         );
     }
-    public ResponseEntity<ResponseObject> updatePassUser(String id, String pass){
+    @Transactional
+    public ResponseEntity<ResponseObject> updatePassUser(String id, ResetPassRequest resetPassRequest){
 
             Optional<User> foundUser = userRepository.findById(id);
-            if(foundUser.isPresent() && pass!=null){
-                foundUser.get().setPassword(passwordEncoder.encode(pass));
+            if(foundUser.isPresent() && resetPassRequest!=null){
+                foundUser.get().setPassword(passwordEncoder.encode(resetPassRequest.getResetpass()));
                 try{
                     userRepository.save(foundUser.get());
                 }
@@ -263,18 +261,18 @@ public class UserService {
         throw new NotFoundException("Can not found user with id" );
     }
 
-    @Transactional
-    public ResponseEntity<?> updatePasswordReset(String id, ChangePassword req) {
-        Optional<User> user = userRepository.findUserByIdAndState(id, Constant.USER_ACTIVE);
-        if (user.isPresent() && user.get().getToken() != null) {
-            if (req.getOldpass().equals(user.get().getToken().getOtp())) {
-                user.get().setPassword(passwordEncoder.encode(req.getNewpass()));
-                user.get().setToken(null);
-                userRepository.save(user.get());
-                return ResponseEntity.status(HttpStatus.OK).body(
-                        new ResponseObject("true", "Change password success", ""));
-            } else throw new AppException(HttpStatus.UNPROCESSABLE_ENTITY.value(), "Your otp is wrong");
-        }
-        throw new NotFoundException("Can not found user with id " + id + " is activated");
-    }
+//    @Transactional
+//    public ResponseEntity<?> updatePasswordReset(String id, ChangePassword req) {
+//        Optional<User> user = userRepository.findUserByIdAndState(id, Constant.USER_ACTIVE);
+//        if (user.isPresent() && user.get().getToken() != null) {
+//            if (req.getOldpass().equals(user.get().getToken().getOtp())) {
+//                user.get().setPassword(passwordEncoder.encode(req.getNewpass()));
+//                user.get().setToken(null);
+//                userRepository.save(user.get());
+//                return ResponseEntity.status(HttpStatus.OK).body(
+//                        new ResponseObject("true", "Change password success", ""));
+//            } else throw new AppException(HttpStatus.UNPROCESSABLE_ENTITY.value(), "Your otp is wrong");
+//        }
+//        throw new NotFoundException("Can not found user with id " + id + " is activated");
+//    }
     }
