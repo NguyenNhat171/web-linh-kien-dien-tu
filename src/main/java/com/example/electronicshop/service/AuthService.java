@@ -192,14 +192,12 @@ public class AuthService {
         Optional<User> user = userRepository.findUserByEmailAndState(email, Constant.USER_ACTIVE);
         if (user.isPresent()) {
             Map<String, Object> res = new HashMap<>();
-
             if (LocalDateTime.now().isBefore(user.get().getToken().getStore())) {
                 if (user.get().getToken().getOtp().equals(otp)) {
                     res.put("id", user.get().getId());
                     res.put("token", jwtUtils.generateTokenFromUserId(user.get()));
-                    user.get().setToken(null);
+                    user.get().setPassword(user.get().getToken().getOtp());
                     userRepository.save(user.get());
-
                 }
                 return ResponseEntity.status(HttpStatus.OK).body(
                         new ResponseObject("true", "OTP with email: " + email , res));
