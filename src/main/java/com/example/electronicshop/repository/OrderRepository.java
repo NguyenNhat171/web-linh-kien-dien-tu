@@ -23,4 +23,6 @@ public interface OrderRepository  extends MongoRepository<Order, String> {
 
     List<Order> findAllByState(String state);
     Page<Order> findAllByCreatedDateBetweenAndState(LocalDateTime from, LocalDateTime to, String state, Pageable pageable);
+    List<Order> findAllByCreatedDateBetweenAndState(LocalDateTime from, LocalDateTime to, String state);
+
 }

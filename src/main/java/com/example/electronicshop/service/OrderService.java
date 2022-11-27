@@ -281,10 +281,12 @@ public class OrderService {
             e.printStackTrace();
             throw new AppException(HttpStatus.BAD_REQUEST.value(), "Incorrect date format");
         }
-        Page<Order> orderList = orderRepository.findAllByCreatedDateBetweenAndState(fromDate, toDate, Constant.ORDER_PAID, Pageable.unpaged());
+//        Page<Order> orderList = orderRepository.findAllByCreatedDateBetweenAndState(fromDate, toDate, Constant.ORDER_PAID, Pageable.unpaged());
+        List<Order> orderList = orderRepository.findAllByCreatedDateBetweenAndState(fromDate, toDate, Constant.ORDER_PAID);
         switch (type) {
             case "all":
-                orderList = orderRepository.findAllByState(Constant.ORDER_PAID, PageRequest.of(0, Integer.MAX_VALUE, Sort.by("lastModifiedDate").ascending()));
+//                orderList = orderRepository.findAllByState(Constant.ORDER_PAID, PageRequest.of(0, Integer.MAX_VALUE, Sort.by("lastModifiedDate").ascending()));
+                orderList = orderRepository.findAllByState(Constant.ORDER_PAID);
                 pattern = "";
                 break;
             case "month":
@@ -302,25 +304,25 @@ public class OrderService {
                 );
     }
 
-    public List<OrderSale> getSaleAmount(Page<Order> orderList, String pattern) {
+    public List<OrderSale> getSaleAmount(List<Order> orderList, String pattern) {
         List<OrderSale> ordersSaleResList = new ArrayList<>();
         DateTimeFormatter df = DateTimeFormatter.ofPattern(pattern);
-        if (orderList.getSize() > 0) {
+        if (orderList.size() > 0) {
             OrderSale ordersSaleRes = new OrderSale();
             int quantity = 1;
-            for (int i = 0; i <= orderList.getSize() - 1; i++) {
-                String dateFormat = df.format(orderList.getContent().get(i).getLastModifiedDate());
+            for (int i = 0; i <= orderList.size() - 1; i++) {
+                String dateFormat = df.format(orderList.get(i).getLastModifiedDate());
                 if (i == 0 || !ordersSaleRes.getDate().equals(dateFormat)) {
                     if (i > 0) ordersSaleResList.add(ordersSaleRes);
                     if (dateFormat.isBlank()) dateFormat = "all";
                     ordersSaleRes = new OrderSale(dateFormat,
-                            orderList.getContent().get(i).getTotalPrice(), quantity);
+                            orderList.get(i).getTotalPrice(), quantity);
                 } else {
                     quantity++;
-                    ordersSaleRes.setAmount(ordersSaleRes.getAmount().add(orderList.getContent().get(i).getTotalPrice()));
+                    ordersSaleRes.setAmount(ordersSaleRes.getAmount().add(orderList.get(i).getTotalPrice()));
                     ordersSaleRes.setOrderQuantity(quantity);
                 }
-                if (i == orderList.getSize() - 1) ordersSaleResList.add(ordersSaleRes);
+                if (i == orderList.size() - 1) ordersSaleResList.add(ordersSaleRes);
             }
         }
         return ordersSaleResList;
