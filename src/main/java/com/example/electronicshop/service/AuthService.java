@@ -106,7 +106,7 @@ public class AuthService {
         if (userRepository.existsByEmail(req.getEmail()))
             throw new AppException(HttpStatus.CONFLICT.value(), "Email already exists");
         req.setPassword(passwordEncoder.encode(req.getPassword()));
-        User user = userMapper.toUser(req);
+        User user = userMapper.toUserMail(req);
         if (user != null) {
             try {
                 sendVerifyMail(user);
@@ -140,11 +140,25 @@ public class AuthService {
         String token = String.valueOf(ThreadLocalRandom.current().nextInt(100000, 1000000));
         Map<String, Object> model = new HashMap<>();
         model.put("token", token);
-        user.setToken(new Token(token, LocalDateTime.now().plusMinutes(5)));
+        user.setToken(new Token(token, LocalDateTime.now().plusMinutes(30)));
         userRepository.save(user);
         emailService.sendEmail(user.getEmail(), model, MailType.VetifyShop);
     }
-
+    public ResponseEntity<?> sendMailGetOTP(String email) {
+        Optional<User> user = userRepository.findUsersByEmail(email);
+        if (user.isPresent()) {
+            try {
+                sendVerifyMail(user.get());
+                return ResponseEntity.status(HttpStatus.OK).body(
+                        new ResponseObject("true", "Send otp email success", email));
+            } catch (Exception e) {
+                e.printStackTrace();
+                log.error(e.getMessage());
+                throw new AppException(HttpStatus.EXPECTATION_FAILED.value(), "Failed to send reset email");
+            }
+        }
+        throw new NotFoundException("Can not found user with email " + email + " is activated");
+    }
 
   public ResponseEntity<?> verifyCode(VerifyCodeRequest req) {
         switch (req.getType().toLowerCase()) {
@@ -183,11 +197,11 @@ public class AuthService {
     }
 
     private ResponseEntity<ResponseObject> verifyRegister(String email, String otp) {
-        Optional<User> user = userRepository.findUserByEmailAndState(email, Constant.USER_NOT_ACTIVE);
+        Optional<User> user = userRepository.findUserByEmailAndState(email, Constant.USER_NOT_VERIFY);
         if (user.isPresent()) {
             if (LocalDateTime.now().isBefore(user.get().getToken().getStore())) {
                 if (user.get().getToken().getOtp().equals(otp)) {
-                    user.get().setState(Constant.USER_NOT_ACTIVE);
+                    user.get().setState(Constant.USER_ACTIVE);
                     user.get().setToken(null);
                     userRepository.save(user.get());
 

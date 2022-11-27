@@ -12,7 +12,6 @@ import com.example.electronicshop.models.enity.ProductElec;
 import com.example.electronicshop.models.enity.ProductElecImage;
 import com.example.electronicshop.notification.AppException;
 import com.example.electronicshop.notification.NotFoundException;
-import com.example.electronicshop.repository.BrandRepository;
 import com.example.electronicshop.repository.CategoryRepository;
 import com.example.electronicshop.repository.ProductElecRepository;
 import lombok.AllArgsConstructor;

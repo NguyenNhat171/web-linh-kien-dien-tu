@@ -12,6 +12,7 @@ public class Constant {
     //USER STATE
     public static final String USER_ACTIVE = "active";
     public static final String USER_NOT_ACTIVE = "block";
+    public static final String USER_NOT_VERIFY = "not_verify";
     //COMMENT STATE
     public static final String COMMENT_ENABLE = "enable";
     public static final String COMMENT_BLOCK = "block";

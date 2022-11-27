@@ -10,10 +10,7 @@ import com.example.electronicshop.service.AuthService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -45,7 +42,11 @@ public class AuthController {
     public ResponseEntity<?> registermail( @RequestBody Register registerReq) {
         return authService.registerWithMail(registerReq);
     }
-
+    @PostMapping("/getotp")
+    public ResponseEntity<?> getOTPMail(@RequestParam(value ="email")String email) {
+        if (!email.isBlank()) return authService.sendMailGetOTP(email);
+        throw new AppException(HttpStatus.BAD_REQUEST.value(), "Email is required");
+    }
     @PostMapping("/reset")
     public ResponseEntity<?> reset(@RequestBody VerifyCodeRequest req) {
         if (!req.getEmail().isBlank()) return authService.reset(req.getEmail());

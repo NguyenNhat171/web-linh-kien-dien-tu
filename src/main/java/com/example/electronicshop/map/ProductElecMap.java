@@ -7,7 +7,6 @@ import com.example.electronicshop.config.Constant;
 import com.example.electronicshop.models.enity.Category;
 import com.example.electronicshop.models.enity.ProductElec;
 import com.example.electronicshop.models.enity.ProductElecImage;
-import com.example.electronicshop.repository.BrandRepository;
 import com.example.electronicshop.repository.CategoryRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
