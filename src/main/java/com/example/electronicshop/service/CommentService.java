@@ -85,7 +85,7 @@ public class CommentService {
     }
 
     public ResponseEntity<ResponseObject> blockComment(String id) {
-        Optional<Comment> comment =commentRepository.findCommentByIdAndState(id,Constant.COMMENT_ENABLE);
+        Optional<Comment> comment =commentRepository.findById(id);
         if (comment.isPresent()) {
             comment.get().setState(Constant.COMMENT_BLOCK);
             commentRepository.save(comment.get());
@@ -96,7 +96,7 @@ public class CommentService {
     }
 
     public ResponseEntity<ResponseObject> setEnableComment(String id) {
-        Optional<Comment> comment =commentRepository.findCommentByIdAndState(id,Constant.COMMENT_PROCESS);
+        Optional<Comment> comment =commentRepository.findById(id);
         if (comment.isPresent()) {
             comment.get().setState(Constant.COMMENT_ENABLE);
             commentRepository.save(comment.get());
