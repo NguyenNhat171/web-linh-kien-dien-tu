@@ -13,7 +13,21 @@ public class CommentResponse {
     private String content;
     private double rate;
     private String state;
+    private String userid;
     private String reviewedBy;
+    private String productid;
+    private String productname;
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
     private LocalDateTime createdDate;
+
+    public CommentResponse(String id, String content, double rate, String state, String reviewedBy, LocalDateTime createdDate) {
+        this.id = id;
+        this.content = content;
+        this.rate = rate;
+        this.state = state;
+        this.reviewedBy = reviewedBy;
+        this.createdDate = createdDate;
+    }
+
+
 }

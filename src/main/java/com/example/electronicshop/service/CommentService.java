@@ -107,10 +107,11 @@ public class CommentService {
     }
     public ResponseEntity<ResponseObject> findAllComment(){
         List<Comment> comment = commentRepository.findAll();
-        if(comment.size()>0)
+        List<CommentResponse> resList = comment.stream().map(commentMap::toAllCommentRes).collect(Collectors.toList());
+        if(resList.size()>0)
         {
             return ResponseEntity.status(HttpStatus.OK).body(
-                new ResponseObject("true", "find all comment successfully ", comment));
+                new ResponseObject("true", "find all comment successfully ", resList));
         }
         else
             return ResponseEntity.status(HttpStatus.OK).body(

@@ -20,4 +20,8 @@ public class CommentMap {
         return new CommentResponse(req.getId(), req.getContent(), req.getRate(),
                 req.getState(), req.getUser().getName(), req.getCreatedDate());
     }
+    public CommentResponse toAllCommentRes(Comment req){
+        return new CommentResponse(req.getId(), req.getContent(), req.getRate(),
+                req.getState(), req.getUser().getId(),req.getUser().getName(),req.getProduct().getId(),req.getProduct().getName() ,req.getCreatedDate());
+    }
 }
