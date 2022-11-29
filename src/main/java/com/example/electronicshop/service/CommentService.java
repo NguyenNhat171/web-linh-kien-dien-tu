@@ -68,8 +68,7 @@ public class CommentService {
         if (user.isPresent()) {
             Optional<ProductElec> product = productRepository.findProductByIdAndState(req.getProductId(), Constant.ENABLE);
             if (product.isPresent()) {
-            Optional<Order>order= orderRepository.findOrderByUser_IdAndState(new ObjectId(userId),Constant.ORDER_PAID);
-            if(order.isPresent()) {
+
                 Comment newComment = new Comment(req.getContent(), req.getRate(), product.get(), user.get(), Constant.COMMENT_PROCESS, LocalDateTime.now());
                 commentRepository.save(newComment);
                 int rate = ((product.get().getRate() * product.get().getRateCount()) + req.getRate()) / (product.get().getRateCount());
@@ -77,9 +76,6 @@ public class CommentService {
                 productRepository.save(product.get());
                 return ResponseEntity.status(HttpStatus.OK).body(
                         new ResponseObject("true", "Add comment success ", newComment));
-            }
-            else return ResponseEntity.status(HttpStatus.OK).body(
-                    new ResponseObject("false", "You must buy a new product to comment this product"," "));
             } throw new NotFoundException("Can not found product with id: " + req.getProductId());
         } throw new NotFoundException("Can not found user with id: " + userId);
     }
