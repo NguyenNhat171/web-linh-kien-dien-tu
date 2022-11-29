@@ -17,8 +17,17 @@ import java.util.List;
 @NoArgsConstructor
 public class CartItemResponse {
     private String itemId;
+    private String productid;
     private String name;
     private  List<ProductElecImage> image;
     private BigDecimal price;
     private long quantity;
+
+    public CartItemResponse(String itemId, String name, List<ProductElecImage> image, BigDecimal price, long quantity) {
+        this.itemId = itemId;
+        this.name = name;
+        this.image = image;
+        this.price = price;
+        this.quantity = quantity;
+    }
 }

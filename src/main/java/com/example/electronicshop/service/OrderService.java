@@ -152,7 +152,7 @@ public class OrderService {
 
     public ResponseEntity<?> findAllOrderByUserId(String userId) {
         List<Order> orders = orderRepository.findOrderByUser_Id(new ObjectId(userId));
-        List<OrderResponse> resList = orders.stream().map(orderMapper::toOrderDetailRes).collect(Collectors.toList());
+        List<OrderResponse> resList = orders.stream().map(orderMapper::toOrderDetailResAll).collect(Collectors.toList());
         Map<String, Object> resp = new HashMap<>();
         resp.put("list", resList);
         if(orders.size()>0){
