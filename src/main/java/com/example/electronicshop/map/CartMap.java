@@ -14,9 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 import java.util.stream.Collectors;
 @Service
-
 public class CartMap {
-
   public CartResponse toCartRes (Order order) {
         CartResponse res = new CartResponse(order.getId(), order.getTotalProduct(), order.getTotalPrice(), order.getState());
         res.setItems(order.getProductElecList().stream().map(CartMap::toCartItemRes).collect(Collectors.toList()));

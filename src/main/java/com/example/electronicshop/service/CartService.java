@@ -134,7 +134,7 @@ public class CartService {
                     new ResponseObject("true", "Delete item "+orderProduct.getId()+" in cart success", ""));
         }
         Optional <ProductElec> productElec = productElecRepository.findProductByIdAndState(req.getProductId(), Constant.ENABLE);
-                long quantity = orderProduct.getQuantity() + req.getQuantity();
+                long quantity =  req.getQuantity();
                 if (productElec.get().getQuantity() >= quantity && quantity > 0) {
                     orderProduct.setQuantity(quantity);
                     orderProductRepository.save(orderProduct);
