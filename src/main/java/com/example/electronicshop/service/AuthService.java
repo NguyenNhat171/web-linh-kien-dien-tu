@@ -218,10 +218,10 @@ public class AuthService {
                     user.get().setState(Constant.USER_ACTIVE);
                     user.get().setToken(null);
                     userRepository.save(user.get());
-
+                    return ResponseEntity.status(HttpStatus.OK).body(
+                            new ResponseObject("true", "OTP with email: " + email + " is " + "true", user));
                 }
-                return ResponseEntity.status(HttpStatus.OK).body(
-                        new ResponseObject("true", "OTP with email: " + email + " is " + "true", ""));
+
             } else {
                 user.get().setToken(null);
                 userRepository.save(user.get());
