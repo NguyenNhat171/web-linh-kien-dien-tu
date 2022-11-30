@@ -46,7 +46,7 @@ public class CartService {
         if (user.isPresent()) {
             Optional<Order> order = orderRepository.findOrderByUser_IdAndState(new ObjectId(userId), Constant.ORDER_INCART);
             if (order.isPresent()) {
-                CartResponse res = cartMapper.toCartRes(order.get());
+                CartResponse res = cartMapper.toCartResAll(order.get());
                 return ResponseEntity.status(HttpStatus.OK).body(
                         new ResponseObject("true", "Get cart success", res));
             } throw new NotFoundException("Can not found any order with user id: "+userId);
@@ -100,7 +100,7 @@ public class CartService {
             orderRepository.insert(order);
             OrderProduct item = new OrderProduct(productOption.get() ,req.getQuantity(), order);
             orderProductRepository.insert(item);
-            CartItemResponse res = CartMap.toCartItemRes(item);
+            CartItemResponse res = CartMap.toCartItemAllRes(item);
             return ResponseEntity.status(HttpStatus.CREATED).body(
                     new ResponseObject("true", "Add product to cart first time success", res));
         } else throw new NotFoundException("Can not found product with id: "+req.getProductId());
@@ -113,7 +113,7 @@ public class CartService {
             checkProductQuantity(product.get(), req);
             OrderProduct orderProduct = new OrderProduct(product.get(), req.getQuantity(), order);
             orderProductRepository.insert(orderProduct);
-            CartItemResponse res = CartMap.toCartItemRes(orderProduct);
+            CartItemResponse res = CartMap.toCartItemAllRes(orderProduct);
             return ResponseEntity.status(HttpStatus.CREATED).body(
                     new ResponseObject("true", "Add product to cart success", res));
         } else throw new NotFoundException("Can not found product with id: "+req.getProductId());
@@ -140,7 +140,7 @@ public class CartService {
                     orderProductRepository.save(orderProduct);
                 }
                 else throw new AppException(HttpStatus.CONFLICT.value(), "Quantity invalid or exceeds stock on product: "+req.getProductId());
-        CartItemResponse res = CartMap.toCartItemRes(orderProduct);
+        CartItemResponse res = CartMap.toCartItemAllRes(orderProduct);
         return ResponseEntity.status(HttpStatus.OK).body(
                 new ResponseObject("true", "Update product "+req.getProductId()+" in cart success", res));
     }
