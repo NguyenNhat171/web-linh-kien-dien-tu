@@ -24,7 +24,7 @@ public class CartMap {
     }
     public CartResponse toCartResAll (Order order) {
         CartResponse res = new CartResponse(order.getId(), order.getTotalProduct(), order.getTotalPrice(), order.getState());
-        res.setItems(order.getProductElecList().stream().map(CartMap::toCartItemRes).collect(Collectors.toList()));
+        res.setItems(order.getProductElecList().stream().map(CartMap::toCartItemAllRes).collect(Collectors.toList()));
         return res;
     }
 
