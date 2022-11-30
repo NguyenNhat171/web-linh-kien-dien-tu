@@ -37,6 +37,7 @@ public class CartMap {
         return new CartItemResponse(orderProduct.getId(),orderProduct.getProductElec().getId(), orderProduct.getProductElec().getName(),
                 orderProduct.getProductElec().getImages(),
                 orderProduct.getPrice(),
-                orderProduct.getQuantity());
+                orderProduct.getQuantity(),
+               orderProduct.getProductElec().getQuantity());
     }
 }

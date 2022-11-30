@@ -22,6 +22,7 @@ public class CartItemResponse {
     private  List<ProductElecImage> image;
     private BigDecimal price;
     private long quantity;
+    private long totalquanlityproduct;
 
     public CartItemResponse(String itemId, String name, List<ProductElecImage> image, BigDecimal price, long quantity) {
         this.itemId = itemId;
@@ -29,5 +30,14 @@ public class CartItemResponse {
         this.image = image;
         this.price = price;
         this.quantity = quantity;
+    }
+
+    public CartItemResponse(String itemId, String name, List<ProductElecImage> image, BigDecimal price, long quantity, long totalquanlityproduct) {
+        this.itemId = itemId;
+        this.name = name;
+        this.image = image;
+        this.price = price;
+        this.quantity = quantity;
+        this.totalquanlityproduct = totalquanlityproduct;
     }
 }
