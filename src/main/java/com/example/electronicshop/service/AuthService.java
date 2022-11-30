@@ -204,8 +204,7 @@ public class AuthService {
             } else {
                 user.get().setToken(null);
                 userRepository.save(user.get());
-                return ResponseEntity.status(HttpStatus.OK).body(
-                        new ResponseObject("false", "OTP with email: " + email + " is expired" , ""));
+                throw new AppException(HttpStatus.EXPECTATION_FAILED.value(), "OTP fail");
             }
         }
         throw new NotFoundException("Can not found user with email " + email + " is activated");
@@ -226,8 +225,7 @@ public class AuthService {
             } else {
                 user.get().setToken(null);
                 userRepository.save(user.get());
-                return ResponseEntity.status(HttpStatus.OK).body(
-                        new ResponseObject("false", "OTP with email: " + email + " is expired" , ""));
+                throw new AppException(HttpStatus.EXPECTATION_FAILED.value(), "OTP fail");
             }
         }
         throw new NotFoundException("Can not found user with email " + email);
